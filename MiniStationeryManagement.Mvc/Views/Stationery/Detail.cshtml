@@ -1,0 +1,85 @@
+@model StationeryDetailViewModel
+
+@{
+    ViewData["Title"] = "Stationery Detail";
+}
+
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Stationery Detail</h2>
+        <p class="page-description">Thông tin chi tiết và tình trạng vận hành của sản phẩm trong hệ thống kho.</p>
+    </div>
+
+    <a class="btn btn-outline-secondary px-4" href="/Stationery">
+        ← Quay lại danh sách
+    </a>
+</div>
+
+<div class="detail-layout">
+    <div class="bg-white rounded-4 border shadow-sm overflow-hidden">
+        <table class="table mb-0">
+            <tbody>
+                <tr>
+                    <th style="width: 30%">ID Hệ thống</th>
+                    <td class="text-secondary">@Model.Id</td>
+                </tr>
+                <tr>
+                    <th>Mã sản phẩm (SKU)</th>
+                    <td class="fw-bold">@Model.Sku</td>
+                </tr>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <td class="text-dark fw-bold fs-5">@Model.Name</td>
+                </tr>
+                <tr>
+                    <th>Nhóm sản phẩm</th>
+                    <td><span class="badge bg-light text-dark border">@Model.Category</span></td>
+                </tr>
+                <tr>
+                    <th>Nhà cung cấp</th>
+                    <td>@Model.Supplier</td>
+                </tr>
+                <tr>
+                    <th>Giá bán hiện tại</th>
+                    <td class="text-danger fw-bold">@Model.PriceText</td>
+                </tr>
+                <tr>
+                    <th>Số lượng tồn kho</th>
+                    <td class="fw-semibold">@Model.Quantity</td>
+                </tr>
+                <tr>
+                    <th>Mức tồn tối thiểu</th>
+                    <td class="text-muted">@Model.MinStock</td>
+                </tr>
+                <tr>
+                    <th>Tổng giá trị tồn kho</th>
+                    <td class="text-primary fw-bold">@Model.InventoryValueText</td>
+                </tr>
+                <tr>
+                    <th>Cập nhật lần cuối</th>
+                    <td class="text-muted">@Model.LastUpdatedText</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <div class="side-card warning">
+            <h4>Trạng thái tồn kho</h4>
+            <h3>⚠️ @Model.StockStatus</h3>
+            <p>@Model.ReorderSuggestion</p>
+        </div>
+
+        <div class="side-card info">
+            <h4>Giá trị tồn kho hiện tại</h4>
+            <h3>💰 @Model.InventoryValueText</h3>
+            <p>Tính toán tự động dựa trên giá bán thực tế và số lượng khả dụng trong kho.</p>
+        </div>
+
+        <div class="side-card success">
+            <h4>Cập nhật lần cuối</h4>
+            <h3>⏱️ @Model.LastUpdatedText</h3>
+            <p>Dữ liệu đồng bộ theo thời gian thực từ cơ sở dữ liệu chính.</p>
+        </div>
+    </div>
+</div>
