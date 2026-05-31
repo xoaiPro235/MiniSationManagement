@@ -1,51 +1,40 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MiniStationeryManagement.Mvc</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - Stationery Management</title>
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MiniStationeryManagement.Mvc.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom shadow-sm mb-4 py-3">
-            <div class="container">
-                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">📌 MiniStationery</a>
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-             
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav ms-auto gap-2">
-                        <li class="nav-item">
-                            <a class="nav-link fw-medium px-3 text-secondary" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-medium px-3 text-secondary" asp-area="" asp-controller="Home" asp-action="Privacy">Bảo mật</a>
-                        </li>
-                    </ul>
-                </div>
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="brand">
+                <a asp-controller="Home" asp-action="Index">Stationery Management</a>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-5">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted py-3 bg-white position-absolute bottom-0 w-100">
-        <div class="container text-center text-md-start d-flex justify-content-between flex-wrap gap-2">
-            <span>&copy; 2026 - MiniStationeryManagement.Mvc</span>
-            <a class="text-decoration-none text-muted" asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a>
+            <nav class="main-nav">
+                <a asp-controller="Home" asp-action="Index">Home</a>
+                <a asp-controller="Stationery" asp-action="Index">Products</a>
+                <a asp-controller="Stationery" asp-action="Stats">Stats</a>
+                <a asp-controller="Stationery" asp-action="Search">Search</a>
+                <a asp-controller="Stationery" asp-action="Create">Create</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <span>&copy; 2025 - AspNetWeek3.Mvc - Lab03</span>
+            <a href="#">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

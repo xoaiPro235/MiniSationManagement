@@ -1,95 +1,276 @@
-html {
-  font-size: 14px;
-}
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #2563eb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+* {
+    box-sizing: border-box;
 }
 
 body {
-  margin-bottom: 60px;
-  background: #f8fafc;
-  color: #1e293b;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
 }
 
-/* Base Custom Table Modernization */
-.table {
-    --bs-table-bg: transparent;
-    --bs-table-striped-bg: #f8fafc;
-    border-color: #f1f5f9 !important;
+a {
+    color: #2563eb;
+    text-decoration: none;
 }
 
-.table th {
-    font-weight: 600;
-    color: #475569;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.05em;
-    padding: 14px 16px !important;
+a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    width: min(1180px, 92%);
+    margin: 0 auto;
+}
+
+.site-header {
+    background: #111827;
+    color: white;
+    padding: 18px 0;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand a {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.main-nav {
+    display: flex;
+    gap: 20px;
+}
+
+.main-nav a {
+    color: #e5e7eb;
+    text-decoration: none;
+}
+
+.main-nav a:hover {
+    color: white;
+}
+
+.main-content {
+    padding: 36px 0 64px;
+}
+
+.site-footer {
+    border-top: 1px solid #e5e7eb;
     background: #f1f5f9;
+    padding: 22px 0;
 }
 
-.table td {
-    padding: 16px !important;
-    color: #334155;
-    vertical-align: middle;
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    color: #475569;
 }
 
-/* Custom UI Components */
 .page-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 24px;
-    margin-bottom: 32px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 28px;
 }
 
 .page-title {
-    font-size: 28px;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
+    font-size: 38px;
+    margin: 0 0 10px;
 }
 
 .page-description {
-    color: #64748b;
-    font-size: 15px;
-    margin-bottom: 0;
+    margin: 0;
+    color: #475569;
 }
 
-/* Info Panel Customization */
-.info-panel {
+.btn {
+    display: inline-block;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: #1d4ed8;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: #64748b;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+.btn-light {
+    background: white;
+    color: #2563eb;
+    border: 1px solid #cbd5e1;
+}
+
+.btn-light:hover {
+    background: #f8fafc;
+}
+
+.info-box {
     background: #eff6ff;
     border: 1px solid #bfdbfe;
     border-radius: 12px;
-    padding: 16px 20px;
-    margin: 24px 0;
-    color: #1e40af;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
 }
 
-/* Stat Grid Styling */
-.stat-grid {
+.success-box {
+    background: #dcfce7;
+    border: 1px solid #86efac;
+    color: #166534;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-weight: bold;
+}
+
+.product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+}
+
+.product-card h3 {
+    margin: 0 0 10px;
+}
+
+.product-meta {
+    color: #64748b;
+    margin: 6px 0;
+}
+
+.product-price {
+    color: #1d4ed8;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 14px 0;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.badge-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-warning {
+    background: #ffedd5;
+    color: #c2410c;
+}
+
+.badge-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.card-actions {
+    margin-top: 16px;
+}
+
+.form-layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 28px;
+    align-items: flex-start;
+}
+
+.form-box {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.form-control:focus {
+    outline: 2px solid #bfdbfe;
+    border-color: #2563eb;
+}
+
+.text-danger {
+    color: #dc2626;
+}
+
+.text-warning {
+    color: #d97706;
+}
+
+.text-success {
+    color: #16a34a;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.table th,
+.table td {
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    text-align: left;
+}
+
+.table th {
+    background: #f8fafc;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 18px;
     margin: 28px 0;
 }
 
@@ -97,93 +278,53 @@ body {
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 16px;
-    text-align: left;
     padding: 24px;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    text-align: center;
 }
 
 .stat-number {
-    font-size: 32px;
-    font-weight: 800;
+    font-size: 34px;
+    font-weight: bold;
     color: #2563eb;
-    line-height: 1;
 }
 
 .stat-label {
-    color: #64748b;
-    font-weight: 500;
-    font-size: 14px;
+    color: #475569;
     margin-top: 8px;
 }
 
-/* Badge System updates */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 13px;
+.validation-summary-errors {
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 18px;
 }
 
-.badge-success { background: #dcfce7; color: #15803d; }
-.badge-warning { background: #fef3c7; color: #b45309; }
-.badge-danger { background: #fee2e2; color: #b91c1c; }
-
-/* Detail Layout adjustment */
-.detail-layout {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 32px;
-    align-items: start;
+/* 1. Ép toàn bộ khung trình duyệt luôn chiếm hết 100% chiều cao màn hình */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-@media (max-width: 992px) {
-    .detail-layout {
-        grid-template-columns: 1fr;
-    }
+/* 2. Biến body thành một Flexbox container xếp theo chiều dọc (column) */
+body {
+    display: flex;
+    flex-direction: column;
 }
 
-.side-card {
-    background: white;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+/* 3. Thẻ header và footer sẽ giữ nguyên kích thước của chúng */
+.site-header, .site-footer {
+    flex-shrink: 0;
 }
 
-.side-card h4 {
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #64748b;
-    margin-bottom: 8px;
-    font-weight: 600;
+/* 4. ĐÂY LÀ ĐIỀU CỐT LÕI: 
+   Thuộc tính flex-grow: 1 sẽ ép thẻ <main> tự động "giãn rộng ra" 
+   để lấp đầy toàn bộ khoảng trống còn thừa, đẩy footer xuống đáy */
+.main-content {
+    flex-grow: 1;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
-
-.side-card h3 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #0f172a;
-    margin-bottom: 8px;
-}
-
-.side-card p {
-    font-size: 14px;
-    margin-bottom: 0;
-    color: #475569;
-}
-
-.side-card.warning { background: #fffbef; border-color: #fde68a; }
-.side-card.warning h3 { color: #b45309; }
-.side-card.info { background: #f0f9ff; border-color: #bae6fd; }
-.side-card.info h3 { color: #0369a1; }
-.side-card.success { background: #f0fdf4; border-color: #bbf7d0; }
-.side-card.success h3 { color: #166534; }
