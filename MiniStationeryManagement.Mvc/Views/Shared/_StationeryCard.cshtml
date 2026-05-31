@@ -1,0 +1,28 @@
+@model MiniStationeryManagement.Mvc.ViewModels.StationeryListItemViewModel
+
+<div class="product-card">
+    <h3>@Model.Name</h3>
+    <p class="product-meta"><strong>SKU:</strong> @Model.Sku</p>
+    <p class="product-meta"><strong>Danh mục:</strong> @Model.Category</p>
+    <p class="product-price">@Model.PriceText</p>
+    <p>Số lượng: <strong>@Model.Quantity</strong></p>
+    
+    @if (Model.StockStatus == "Còn hàng")
+    {
+        <span class="badge badge-success">@Model.StockStatus</span>
+    }
+    else if (Model.StockStatus == "Cần nhập thêm")
+    {
+        <span class="badge badge-warning">@Model.StockStatus</span>
+    }
+    else
+    {
+        <span class="badge badge-danger">@Model.StockStatus</span>
+    }
+
+    <div class="card-actions">
+        <a class="btn btn-light" asp-controller="Stationery" asp-action="Detail" asp-route-id="@Model.Id">
+            Xem chi tiết
+        </a>
+    </div>
+</div>

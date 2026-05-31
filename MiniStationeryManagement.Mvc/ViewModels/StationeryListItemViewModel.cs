@@ -8,6 +8,7 @@ public class StationeryListItemViewModel
     public string Category { get; set; } = "";
     public string Supplier { get; set; } = "";
     public int Quantity { get; set; }
+    public int MinStock { get; set; }
     public decimal Price { get; set; }
     public string PriceText => $"{Price:N0} VND";
     public decimal InventoryValue => Price * Quantity;

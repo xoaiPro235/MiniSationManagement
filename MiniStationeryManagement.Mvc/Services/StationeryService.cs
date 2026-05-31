@@ -72,4 +72,51 @@ public class StationeryService
             NeedReorderCount = _items.Count(x => x.Quantity > 0 && x.Quantity <= x.MinStock),
         };
     }
+
+    public List<StationeryItem> Search(string? keyword, decimal? minPrice, string? supplier)
+    {
+        var query = _items.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(keyword))
+        {
+            query = query.Where(item =>
+                item.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)
+                || item.Category.Contains(keyword, StringComparison.OrdinalIgnoreCase)
+                || item.Sku.Contains(keyword, StringComparison.OrdinalIgnoreCase)
+            );
+        }
+
+        if (minPrice.HasValue)
+        {
+            query = query.Where((item => item.Price >= minPrice.Value));
+        }
+
+        if (!string.IsNullOrWhiteSpace(supplier))
+        {
+            query = query.Where(item =>
+                item.Supplier.Contains(supplier, StringComparison.OrdinalIgnoreCase)
+            );
+        }
+        return query.ToList();
+    }
+
+    public StationeryItem Create(StationeryCreateViewModel model)
+    {
+        var newId = _items.Count == 0 ? 1 : _items.Max(i => i.Id) + 1;
+
+        var newItem = new StationeryItem
+        {
+            Id = newId,
+            Sku = model.Sku.ToUpper(),
+            Category = model.Category,
+            Supplier = model.Supplier,
+            Price = model.UnitPrice,
+            Quantity = model.Quantity,
+            MinStock = model.MinStock,
+            LastUpdatedAt = DateTime.Now,
+        };
+
+        _items.Add(newItem);
+        return newItem;
+    }
 }

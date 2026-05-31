@@ -1,81 +1,40 @@
-@model List<StationeryListItemViewModel>
-
+@model List<MiniStationeryManagement.Mvc.ViewModels.StationeryListItemViewModel>
 @{
-    ViewData["Title"] = "Stationery Catalog";
-    var totalItems = Model.Count;
+    ViewData["Title"] = "Danh mục Văn phòng phẩm";
 }
 
 <div class="page-header">
     <div>
-        <h2 class="page-title">Stationery Catalog</h2>
-        <p class="page-description">Quản lý và theo dõi danh sách các sản phẩm văn phòng phẩm trong kho.</p>
+        <h2 class="page-title">Cửa hàng Văn phòng phẩm</h2>
+        <p class="page-description">Quản lý nâng cấp danh sách sản phẩm bằng Layout & Partial View.</p>
     </div>
-
     <div>
-        <a class="btn btn-primary px-4 py-2 fw-semibold shadow-sm" href="/Stationery/Stats">
-            📊 Xem thống kê tồn kho
-        </a>
+        <a class="btn btn-secondary" asp-controller="Stationery" asp-action="Search">Tra cứu sản phẩm</a>
+        <a class="btn" asp-controller="Stationery" asp-action="Create">+ Thêm sản phẩm</a>
     </div>
 </div>
 
-<div class="info-panel shadow-sm">
-    💡 <strong>Tổng số mặt hàng hiện tại:</strong> <span class="badge bg-primary text-white ms-1">@totalItems sản phẩm</span>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="success-box">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="info-box">
+    <strong>Tổng quy mô mặt hàng hiện tại:</strong> @Model.Count sản phẩm.
 </div>
 
 @if (Model.Count == 0)
 {
-    <div class="text-center py-5 bg-white rounded-4 border border-dashed mt-4">
-        <p class="text-muted mb-0">Chưa có sản phẩm nào trong hệ thống.</p>
-    </div>
+    <p>Hệ thống trống. Vui lòng bấm nút Thêm để bổ sung sản phẩm.</p>
 }
 else
 {
-    <div class="bg-white rounded-4 border shadow-sm overflow-hidden mt-4">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr>
-                    <th>SKU</th>
-                    <th>Nhà sản xuất</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Nhóm</th>
-                    <th class="text-end">Giá bán</th>
-                    <th class="text-center">Số lượng</th>
-                    <th class="text-end">Giá trị tồn</th>
-                    <th class="text-center">Trạng thái</th>
-                    <th class="text-center">Hành động</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td class="fw-mono text-secondary">@item.Sku</td>
-                        <td class="fw-medium text-dark">@item.Supplier</td>
-                        <td class="fw-bold text-dark">@item.Name</td>
-                        <td><span class="badge bg-light text-dark border">@item.Category</span></td>
-                        <td class="text-end fw-semibold">@item.PriceText</td>
-                        <td class="text-center">@item.Quantity</td>
-                        <td class="text-end text-primary fw-semibold">@item.InventoryValueText</td>
-                        <td class="text-center">
-                            <span class="badge @item.StockStatusClass">
-                                @item.StockStatus
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <a class="btn btn-sm btn-outline-primary px-3 rounded-2 fw-medium" href="/Stationery/Detail/@item.Id">
-                                Chi tiết
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="product-grid">
+        @foreach (var item in Model)
+        {
+            <partial name="_StationeryCard" model="item" />
+        }
     </div>
 }
-
-<p class="mt-4">
-    <a class="btn btn-light border px-4" href="/">
-        ← Quay lại trang chủ
-    </a>
-</p>

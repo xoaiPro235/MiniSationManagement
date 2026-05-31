@@ -1,0 +1,72 @@
+@model MiniStationeryManagement.Mvc.ViewModels.StationeryCreateViewModel
+@{
+    ViewData["Title"] = "Thêm mới văn phòng phẩm";
+}
+
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Thêm mới Văn phòng phẩm</h2>
+        <p class="page-description">Form POST thực hiện Model Binding đồng bộ dữ liệu an toàn vào hệ thống.</p>
+    </div>
+    <a class="btn btn-light" asp-controller="Stationery" asp-action="Index">Hủy bỏ</a>
+</div>
+
+<div class="form-layout">
+    <form class="form-box" asp-controller="Stationery" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Sku">Mã định danh định chuẩn (SKU)</label>
+            <input asp-for="Sku" class="form-control" placeholder="Ví dụ: PEN-PILOT-01" />
+            <span asp-validation-for="Sku" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Name">Tên sản phẩm văn phòng phẩm</label>
+            <input asp-for="Name" class="form-control" placeholder="Ví dụ: Bút bi Thiên Long" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Category">Nhóm danh mục</label>
+            <input asp-for="Category" class="form-control" placeholder="Ví dụ: Bút viết, Sách vở..." />
+            <span asp-validation-for="Category" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Supplier">Công ty cung ứng</label>
+            <input asp-for="Supplier" class="form-control" placeholder="Ví dụ: Tập đoàn Thiên Long" />
+            <span asp-validation-for="Supplier" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="UnitPrice">Đơn giá bán nhập xưởng (VND)</label>
+            <input asp-for="UnitPrice" class="form-control" type="number" />
+            <span asp-validation-for="UnitPrice" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Quantity">Số lượng nhập kho ban đầu</label>
+            <input asp-for="Quantity" class="form-control" type="number" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MinStock">Ngưỡng cảnh báo tồn kho tối thiểu</label>
+            <input asp-for="MinStock" class="form-control" type="number" />
+            <span asp-validation-for="MinStock" class="text-danger"></span>
+        </div>
+
+        <button class="btn" type="submit">Lưu lại hệ thống</button>
+    </form>
+
+    <div class="info-box">
+        <h3>Kiến thức cơ bản về Form POST</h3>
+        <p>Khi bạn thực hiện gửi form, ASP.NET Core sẽ tự động phân tách cấu trúc phần thân (HTTP Body) của gói tin POST để khớp giá trị thuộc tính <code>asp-for</code> với Property của ViewModel tương ứng.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
