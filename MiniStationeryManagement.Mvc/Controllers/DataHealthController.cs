@@ -19,7 +19,6 @@ public class DataHealthController : Controller
     {
         var model = new DataHealthViewModel();
 
-        // 1. Kiểm thử Trạng thái EF Core Migration
         try
         {
             var pendingMigrations = await _context.Database.GetPendingMigrationsAsync();
@@ -32,7 +31,7 @@ public class DataHealthController : Controller
             model.MigrationStatus = $"UNHEALTHY (Lỗi kết nối cơ sở dữ liệu: {ex.Message})";
         }
 
-        // 2. Kiểm thử Trạng thái Seed Data hình thành dữ liệu mẫu
+        // 1. Kiểm thử Trạng thái Seed Data hình thành dữ liệu mẫu
         try
         {
             var hasCategories = await _context.StationeryCategories.AnyAsync();
@@ -47,12 +46,11 @@ public class DataHealthController : Controller
             model.SeedDataStatus = "ERROR";
         }
 
-        // 3. Minh chứng cấu hình tối ưu Read-Only bằng No-Tracking
         var itemsNoTracking = await _context.StationeryItems.AsNoTracking().Take(1).ToListAsync();
         model.NoTrackingStatus =
             "ENABLED (Đã áp dụng thành công AsNoTracking() giúp giải phóng bộ nhớ đệm)";
 
-        // 4. Kiểm thử tính toàn vẹn dữ liệu ACID với DB Transaction
+        // 2. Kiểm thử tính toàn vẹn dữ liệu ACID với DB Transaction
         using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             try

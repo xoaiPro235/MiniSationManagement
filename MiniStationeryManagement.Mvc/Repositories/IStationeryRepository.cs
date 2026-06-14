@@ -13,4 +13,8 @@ public interface IStationeryRepository
         decimal? maxPrice
     );
     Task UpdateStockAsync(int itemId, int quantity);
+    Task<List<StationeryCategory>> GetAllCategoriesAsync();
+    Task AddAsync(StationeryItem item);
+    Task SaveChangesAsync();
+    Task<List<StationeryItem>> SearchAsync(string? keyword, int? categoryId);
 }

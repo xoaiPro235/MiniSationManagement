@@ -1,7 +1,7 @@
-@model StationeryStatsViewModel
+@model MiniStationeryManagement.Mvc.ViewModels.StationeryStatsViewModel
 
 @{
-    ViewData["Title"] = "Inventory Stats";
+    ViewData["Title"] = "Thống Kê Kho Hàng";
 }
 
 <div class="page-header">
@@ -10,81 +10,68 @@
         <p class="page-description">Báo cáo tổng quan số lượng, giá trị và các chỉ số cảnh báo nhập hàng.</p>
     </div>
 
-    <a class="btn btn-outline-secondary px-4" href="/Stationery">
+    <a class="btn" href="/Stationery" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; background: #fff; color: #333;">
         ← Quay lại danh sách
     </a>
 </div>
 
-<div class="stat-grid">
-    <div class="stat-card">
-        <div class="stat-number">@Model.TotalItemTypes</div>
-        <div class="stat-label">Tổng số loại sản phẩm</div>
+<div class="stat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+    <div class="stat-card" style="padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-align: center;">
+        <div class="stat-number" style="font-size: 2em; font-weight: bold; color: #333;">@Model.TotalItemTypes</div>
+        <div class="stat-label" style="color: #666; font-size: 0.9em; margin-top: 5px;">Tổng số loại sản phẩm</div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-number text-success">@Model.TotalQuantity</div>
-        <div class="stat-label">Tổng số lượng tồn kho</div>
+    <div class="stat-card" style="padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-align: center;">
+        <div class="stat-number" style="font-size: 2em; font-weight: bold; color: #198754;">@Model.TotalQuantity</div>
+        <div class="stat-label" style="color: #666; font-size: 0.9em; margin-top: 5px;">Tổng số lượng tồn kho</div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-number text-primary">@Model.TotalInventoryValueText</div>
-        <div class="stat-label">Tổng giá trị tồn kho</div>
+    <div class="stat-card" style="padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-align: center;">
+        <div class="stat-number" style="font-size: 2em; font-weight: bold; color: #0d6efd;">@Model.TotalInventoryValue.ToString("N0") đ</div>
+        <div class="stat-label" style="color: #666; font-size: 0.9em; margin-top: 5px;">Tổng giá trị hàng tồn</div>
     </div>
 
-    <div class="stat-card">
-        <div class="stat-number text-danger">@Model.OutOfStockCount</div>
-        <div class="stat-label">Sản phẩm đã hết hàng</div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-number text-warning">@Model.NeedReorderCount</div>
-        <div class="stat-label">Sản phẩm cần nhập thêm</div>
+    <div class="stat-card" style="padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-align: center;">
+        <div class="stat-number" style="font-size: 2em; font-weight: bold; color: #ffc107;">@Model.LowStockItemsCount</div>
+        <div class="stat-label" style="color: #666; font-size: 0.9em; margin-top: 5px;">Sản phẩm chạm mốc tối thiểu</div>
     </div>
 </div>
 
-<div class="info-panel shadow-sm my-4">
-    <div class="d-flex align-items-center gap-2">
-        <span class="fs-4">📢</span>
+<div class="info-panel" style="padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 8px; margin: 20px 0; color: #856404;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.5em;">📢</span>
         <div>
-            <strong class="d-block mb-1">Đánh giá tình hình tồn kho:</strong>
-            @if (Model.OutOfStockCount > 0)
+            <strong style="display: block; margin-bottom: 2px;">Đánh giá tình hình tồn kho (Feature 1 - Options):</strong>
+            @if (Model.LowStockItemsCount > 0)
             {
-                <span class="text-danger fw-semibold">⚠️ Có sản phẩm đã hết hàng. Cần kiểm tra và nhập thêm sớm.</span>
-            }
-            else if (Model.NeedReorderCount > 0)
-            {
-                <span class="text-warning fw-semibold">⏳ Một số sản phẩm gần chạm mốc tối thiểu. Nên lập kế hoạch nhập thêm.</span>
+                <span>⏳ Phát hiện thấy có <strong>@Model.LowStockItemsCount</strong> mặt hàng sắp hết kho theo ngưỡng thiết lập. Nên lên kế hoạch nhập hàng gấp.</span>
             }
             else
             {
-                <span class="text-success fw-semibold">✅ Tồn kho hiện tại đang rất ổn định và an toàn.</span>
+                <span>✅ Trạng thái quản lý lượng hàng trong kho hiện tại đang rất ổn định và an toàn.</span>
             }
         </div>
     </div>
 </div>
 
-<div class="bg-white rounded-4 border shadow-sm overflow-hidden mt-4">
-    <table class="table mb-0">
+<div style="background: #fff; border-radius: 8px; border: 1px solid #eee; overflow: hidden; margin-top: 20px;">
+    <table class="table" style="width: 100%; border-collapse: collapse;">
         <tbody>
-            <tr>
-                <th style="width: 40%">Tổng số loại sản phẩm</th>
-                <td class="fw-bold">@Model.TotalItemTypes loại</td>
+            <tr style="border-bottom: 1px solid #eee;">
+                <th style="width: 40%; padding: 12px; text-align: left; background: #f9f9f9;">Tổng số loại danh mục vật tư hiện hữu</th>
+                <td style="padding: 12px; font-weight: bold;">@Model.TotalItemTypes nhóm phân loại</td>
             </tr>
-            <tr>
-                <th>Tổng số lượng tồn kho</th>
-                <td class="fw-bold text-success">@Model.TotalQuantity đơn vị</td>
+            <tr style="border-bottom: 1px solid #eee;">
+                <th style="padding: 12px; text-align: left; background: #f9f9f9;">Tổng dung lượng lưu trữ thực tế</th>
+                <td style="padding: 12px; font-weight: bold; color: #198754;">@Model.TotalQuantity sản phẩm trong kho</td>
             </tr>
-            <tr>
-                <th>Tổng giá trị tồn kho</th>
-                <td class="fw-bold text-primary">@Model.TotalInventoryValueText</td>
+            <tr style="border-bottom: 1px solid #eee;">
+                <th style="padding: 12px; text-align: left; background: #f9f9f9;">Tổng kinh phí vốn lưu động</th>
+                <td style="padding: 12px; font-weight: bold; color: #0d6efd;">@Model.TotalInventoryValue.ToString("N0") đ</td>
             </tr>
-            <tr>
-                <th>Số sản phẩm đã hết hàng</th>
-                <td><span class="badge badge-danger">@Model.OutOfStockCount sản phẩm</span></td>
-            </tr>
-            <tr>
-                <th>Số sản phẩm cần nhập thêm</th>
-                <td><span class="badge badge-warning">@Model.NeedReorderCount sản phẩm</span></td>
+            <tr style="border-bottom: 1px solid #eee;">
+                <th style="padding: 12px; text-align: left; background: #f9f9f9;">Số lượng văn phòng phẩm cần mua thêm</th>
+                <td style="padding: 12px;"><span style="padding: 3px 8px; background: #fff3cd; color: #856404; border-radius: 4px; font-weight: bold;">@Model.LowStockItemsCount sản phẩm</span></td>
             </tr>
         </tbody>
     </table>

@@ -54,4 +54,36 @@ public class StationeryRepository : IStationeryRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task<List<StationeryCategory>> GetAllCategoriesAsync()
+    {
+        return await _context.StationeryCategories.ToListAsync();
+    }
+
+    public async Task AddAsync(StationeryItem item)
+    {
+        await _context.StationeryItems.AddAsync(item);
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<StationeryItem>> SearchAsync(string? keyword, int? categoryId)
+    {
+        var query = _context.StationeryItems.Include(s => s.Category).AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            query = query.Where(s => s.Name.Contains(keyword) || s.Sku.Contains(keyword));
+        }
+
+        if (categoryId.HasValue)
+        {
+            query = query.Where(s => s.CategoryId == categoryId.Value);
+        }
+
+        return await query.ToListAsync();
+    }
 }

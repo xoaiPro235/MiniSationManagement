@@ -1,85 +1,65 @@
-@model StationeryDetailViewModel
+@model MiniStationeryManagement.Mvc.ViewModels.StationeryDetailViewModel
 
 @{
-    ViewData["Title"] = "Stationery Detail";
+    ViewData["Title"] = "Chi Tiết Văn Phòng Phẩm";
 }
 
 <div class="page-header">
     <div>
-        <h2 class="page-title">Stationery Detail</h2>
+        <h2 class="page-title">Chi tiết sản phẩm</h2>
         <p class="page-description">Thông tin chi tiết và tình trạng vận hành của sản phẩm trong hệ thống kho.</p>
     </div>
 
-    <a class="btn btn-outline-secondary px-4" href="/Stationery">
+    <a class="btn" href="/Stationery" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; background: #fff; color: #333;">
         ← Quay lại danh sách
     </a>
 </div>
 
-<div class="detail-layout">
-    <div class="bg-white rounded-4 border shadow-sm overflow-hidden">
-        <table class="table mb-0">
+<div class="detail-layout" style="margin-top: 20px;">
+    <div style="background: #fff; border-radius: 8px; border: 1px solid #eee; overflow: hidden; margin-bottom: 20px;">
+        <table class="table" style="width: 100%; border-collapse: collapse;">
             <tbody>
-                <tr>
-                    <th style="width: 30%">ID Hệ thống</th>
-                    <td class="text-secondary">@Model.Id</td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="width: 30%; padding: 12px; text-align: left; background: #f9f9f9;">ID Hệ thống</th>
+                    <td style="padding: 12px; color: #666;">@Model.Id</td>
                 </tr>
-                <tr>
-                    <th>Mã sản phẩm (SKU)</th>
-                    <td class="fw-bold">@Model.Sku</td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="padding: 12px; text-align: left; background: #f9f9f9;">Mã sản phẩm (SKU)</th>
+                    <td style="padding: 12px; font-weight: bold;">@Model.Sku</td>
                 </tr>
-                <tr>
-                    <th>Tên sản phẩm</th>
-                    <td class="text-dark fw-bold fs-5">@Model.Name</td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="padding: 12px; text-align: left; background: #f9f9f9;">Tên sản phẩm</th>
+                    <td style="padding: 12px; color: #222; font-weight: bold;">@Model.Name</td>
                 </tr>
-                <tr>
-                    <th>Nhóm sản phẩm</th>
-                    <td><span class="badge bg-light text-dark border">@Model.Category</span></td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="padding: 12px; text-align: left; background: #f9f9f9;">Nhóm sản phẩm</th>
+                    <td style="padding: 12px;"><span style="padding: 4px 8px; background: #eef2f7; border-radius: 4px; font-size: 0.9em;">@Model.CategoryName</span></td>
                 </tr>
-                <tr>
-                    <th>Nhà cung cấp</th>
-                    <td>@Model.Supplier</td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="padding: 12px; text-align: left; background: #f9f9f9;">Nhà cung cấp</th>
+                    <td style="padding: 12px;">@Model.Supplier</td>
                 </tr>
-                <tr>
-                    <th>Giá bán hiện tại</th>
-                    <td class="text-danger fw-bold">@Model.PriceText</td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="padding: 12px; text-align: left; background: #f9f9f9;">Giá bán hiện tại</th>
+                    <td style="padding: 12px; color: #dc3545; font-weight: bold;">@Model.Price.ToString("N0") đ</td>
                 </tr>
-                <tr>
-                    <th>Số lượng tồn kho</th>
-                    <td class="fw-semibold">@Model.Quantity</td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="padding: 12px; text-align: left; background: #f9f9f9;">Số lượng tồn kho</th>
+                    <td style="padding: 12px; font-weight: bold;">@Model.Quantity đơn vị</td>
                 </tr>
-                <tr>
-                    <th>Mức tồn tối thiểu</th>
-                    <td class="text-muted">@Model.MinStock</td>
-                </tr>
-                <tr>
-                    <th>Tổng giá trị tồn kho</th>
-                    <td class="text-primary fw-bold">@Model.InventoryValueText</td>
-                </tr>
-                <tr>
-                    <th>Cập nhật lần cuối</th>
-                    <td class="text-muted">@Model.LastUpdatedText</td>
+                <tr style="border-bottom: 1px solid #eee;">
+                    <th style="padding: 12px; text-align: left; background: #f9f9f9;">Tổng giá trị tồn kho</th>
+                    <td style="padding: 12px; color: #0d6efd; font-weight: bold;">@((Model.Price * Model.Quantity).ToString("N0")) đ</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <div>
-        <div class="side-card warning">
-            <h4>Trạng thái tồn kho</h4>
-            <h3>⚠️ @Model.StockStatus</h3>
-            <p>@Model.ReorderSuggestion</p>
-        </div>
-
-        <div class="side-card info">
-            <h4>Giá trị tồn kho hiện tại</h4>
-            <h3>💰 @Model.InventoryValueText</h3>
-            <p>Tính toán tự động dựa trên giá bán thực tế và số lượng khả dụng trong kho.</p>
-        </div>
-
-        <div class="side-card success">
-            <h4>Cập nhật lần cuối</h4>
-            <h3>⏱️ @Model.LastUpdatedText</h3>
-            <p>Dữ liệu đồng bộ theo thời gian thực từ cơ sở dữ liệu chính.</p>
+        <div class="side-card" style="padding: 15px; border-radius: 8px; margin-bottom: 15px; background-color: #f8f9fa; border-left: 4px solid #0d6efd;">
+            <h4 style="margin: 0 0 5px 0; color: #666; font-size: 0.9em;">Giá trị quy đổi dòng vốn</h4>
+            <h3 style="margin: 0; color: #222;">💰 @((Model.Price * Model.Quantity).ToString("N0")) đ</h3>
+            <p style="margin: 5px 0 0 0; font-size: 0.85em; color: #888;">Được nhân tích lũy tự động từ giá bán thực tế và lượng tồn khả dụng trong bộ nhớ.</p>
         </div>
     </div>
 </div>
