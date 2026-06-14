@@ -6,42 +6,75 @@
 <div class="page-header">
     <div>
         <h2 class="page-title">Bộ lọc tìm kiếm văn phòng phẩm</h2>
-        <p class="page-description">Sử dụng Form GET và Query String để truyền trạng thái lọc dữ liệu.</p>
+        <p class="page-description">Sử dụng công nghệ AJAX để lọc dữ liệu thời gian thực không cần tải lại trang.</p>
     </div>
-    <a class="btn btn-light" asp-controller="Stationery" asp-action="Index">Quay lại trang chủ</a>
+    <a class="btn btn-light" asp-controller="Stationery" asp-action="Index" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; background: #fff; color: #333;">Quay lại trang chủ</a>
 </div>
 
-<div class="form-layout">
-    <form class="form-box" asp-controller="Stationery" asp-action="Search" method="get">
-        <div class="form-group">
-            <label asp-for="Keyword">Từ khóa tìm kiếm</label>
-            <input asp-for="Keyword" class="form-control" placeholder="Nhập tên, danh mục hoặc SKU..." />
+<div class="form-layout" style="margin-top: 20px;">
+    <div class="form-box" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 25px;">
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Từ khóa tìm kiếm (Tên / SKU)</label>
+            <input type="text" id="searchKeyword" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Nhập tên sản phẩm hoặc mã SKU..." />
         </div>
-        <div class="form-group">
-            <label asp-for="MinPrice">Giá bán tối thiểu từ (VND)</label>
-            <input asp-for="MinPrice" class="form-control" placeholder="Ví dụ: 20000" />
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Nhóm danh mục liên kết</label>
+            <select id="searchCategoryId" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="">-- Tất cả danh mục --</option>
+                <option value="1">Bút & Viết</option>
+                <option value="2">Giấy & Sổ viết</option>
+            </select>
         </div>
-        <div class="form-group">
-            <label asp-for="Supplier">Nhà cung cấp</label>
-            <input asp-for="Supplier" class="form-control" placeholder="Nhập tên đơn vị cung ứng..." />
-        </div>
-        <button class="btn" type="submit">Tìm kiếm</button>
-        <a class="btn btn-secondary" asp-controller="Stationery" asp-action="Search">Xóa bộ lọc</a>
-    </form>
+        
+        <button type="button" id="btnClear" class="btn btn-secondary" style="padding: 8px 16px; background: #6c757d; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Xóa bộ lọc</button>
+    </div>
 
     <div>
-        <h3>Kết quả tra cứu</h3>
-        <p>Từ khóa hiện tại: <strong>@Model.Keyword</strong> | Giá sàn: <strong>@Model.MinPrice</strong></p>
-
-        @if (Model.StationeryItems.Count == 0)
-        {
-            <div class="info-box" style="background: #fef08a; border-color: #facc15; color: #854d0e;">
-                <strong>Thông báo:</strong> Không tìm thấy sản phẩm văn phòng phẩm nào phù hợp. Vui lòng thử lại với từ khóa khác!
-            </div>
-        }
-        else
-        {
-            <partial name="_StationerySearchResultTable" model="Model.StationeryItems" />
-        }
+        <h3 style="border-bottom: 2px solid #eee; padding-bottom: 8px; margin-bottom: 15px;">Kết quả tra cứu</h3>
+        
+        <div id="search-results">
+            @await Html.PartialAsync("_StationerySearchResultTable", Model.StationeryItems)
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Bắt sự kiện người dùng gõ chữ vào ô tìm kiếm
+        document.getElementById('searchKeyword').addEventListener('keyup', executeSearch);
+        
+        // Bắt sự kiện người dùng thay đổi lựa chọn Danh mục
+        document.getElementById('searchCategoryId').addEventListener('change', executeSearch);
+
+        // Nút xóa sạch bộ lọc
+        document.getElementById('btnClear').addEventListener('click', function () {
+            document.getElementById('searchKeyword').value = '';
+            document.getElementById('searchCategoryId').value = '';
+            executeSearch();
+        });
+
+        // Hàm gọi AJAX tự động kết nối trực tiếp vào hành động PerformSearch có sẵn của bạn
+        function executeSearch() {
+            var keyword = document.getElementById('searchKeyword').value;
+            var categoryId = document.getElementById('searchCategoryId').value;
+
+            // Kéo dữ liệu ngầm từ URL /Stationery/PerformSearch của bạn
+            var url = '/Stationery/PerformSearch?keyword=' + encodeURIComponent(keyword);
+            if (categoryId) {
+                url += '&categoryId=' + categoryId;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Đắp mảnh HTML của bảng kết quả vào vùng hiển thị mà không reload trang
+                    document.getElementById('search-results').innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+}

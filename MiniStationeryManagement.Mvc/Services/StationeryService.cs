@@ -66,8 +66,6 @@ public class StationeryService : IStationeryService
     // 3. Hiện thực hàm lấy danh sách danh mục làm Dropdown
     public async Task<List<StationeryCategoryViewModel>> GetAllCategoriesAsync()
     {
-        // Giả sử bạn bổ sung hàm GetAllCategoriesAsync() bên IStationeryRepository
-        // Hoặc bạn có thể dùng DbContext trực tiếp nếu Repository cho phép, nhưng chuẩn nhất là qua Repo:
         var categories = await _stationeryRepository.GetAllCategoriesAsync();
         return categories
             .Select(c => new StationeryCategoryViewModel { Id = c.Id, Name = c.Name })
