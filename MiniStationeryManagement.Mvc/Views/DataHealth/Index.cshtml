@@ -1,0 +1,82 @@
+@model MiniStationeryManagement.Mvc.ViewModels.DataHealthViewModel
+
+@{
+    ViewData["Title"] = "Hệ thống kiểm tra dữ liệu - Data Health";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-heart-pulse-fill"></i> Bảng kiểm tra trạng thái dữ liệu (Data Health Status)</h4>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Trang báo cáo này phân tích trực tiếp các tính năng lưu trữ thuộc phạm vi yêu cầu bài tập của Lab04.</p>
+            
+            <table class="table table-bordered table-striped align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 25%">Tính năng dữ liệu</th>
+                        <th style="width: 55%">Chi tiết trạng thái hệ thống</th>
+                        <th style="width: 20%" class="text-center">Đánh giá</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>EF Core Migration</strong></td>
+                        <td>@Model.MigrationStatus</td>
+                        <td class="text-center">
+                            @if (Model.MigrationStatus.Contains("HEALTHY"))
+                            {
+                                <span class="badge bg-success">ĐẠT YÊU CẦU</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">KIỂM TRA LẠI</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Seed Data Mẫu</strong></td>
+                        <td>@Model.SeedDataStatus</td>
+                        <td class="text-center">
+                            @if (Model.SeedDataStatus.Contains("HEALTHY"))
+                            {
+                                <span class="badge bg-success">ĐẠT YÊU CẦU</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">CHƯA ĐỦ</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Query Tracking Mode</strong></td>
+                        <td>@Model.NoTrackingStatus</td>
+                        <td class="text-center">
+                            <span class="badge bg-success">ĐẠT YÊU CẦU</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database Transaction</strong></td>
+                        <td>@Model.TransactionStatus</td>
+                        <td class="text-center">
+                            @if (Model.TransactionStatus.Contains("HEALTHY"))
+                            {
+                                <span class="badge bg-success">ĐẠT YÊU CẦU</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">LỖI VẬN HÀNH</span>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="alert alert-info mt-3 mb-0">
+                <strong>Ghi chú kiểm tra:</strong> Hệ thống đang sử dụng kiến trúc phân tầng 
+                <code>Controller &rarr; Service &rarr; Repository &rarr; DbContext</code> đảm bảo dữ liệu chạy an toàn và không bị xung đột bộ nhớ request.
+            </div>
+        </div>
+    </div>
+</div>

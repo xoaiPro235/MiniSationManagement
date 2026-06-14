@@ -1,11 +1,12 @@
 using Microsoft.Extensions.Options;
+using MiniStationeryManagement.Mvc.Models;
 using MiniStationeryManagement.Mvc.Options;
 using MiniStationeryManagement.Mvc.Repositories;
 using MiniStationeryManagement.Mvc.ViewModels;
 
 namespace MiniStationeryManagement.Mvc.Services;
 
-public class StationeryService
+public class StationeryService : IStationeryService
 {
     private readonly IStationeryRepository _stationeryRepository;
     private readonly AppSettings _appSettings;
@@ -19,6 +20,7 @@ public class StationeryService
         _appSettings = appSettings.Value;
     }
 
+    // 1. Hàm lọc danh sách (Đã có sẵn)
     public async Task<List<StationeryListItemViewModel>> GetFilteredListAsync(
         int? categoryId,
         decimal? minPrice,
@@ -42,8 +44,72 @@ public class StationeryService
             .ToList();
     }
 
-    public async Task OrderStationeryAsync(string customerName, List<(int itemId, int qty)> items)
+    // 2. Hiện thực hàm lấy Chi tiết sản phẩm
+    public async Task<StationeryDetailViewModel?> GetDetailByIdAsync(int id)
     {
-        await _stationeryRepository.CreateOrderWithTransactionAsync(customerName, items);
+        var item = await _stationeryRepository.GetByIdAsync(id);
+        if (item == null)
+            return null;
+
+        return new StationeryDetailViewModel
+        {
+            Id = item.Id,
+            Sku = item.Sku,
+            Name = item.Name,
+            Price = item.Price,
+            Quantity = item.Quantity,
+            Supplier = item.Supplier,
+            CategoryName = item.Category?.Name ?? "Chưa phân loại",
+        };
+    }
+
+    // 3. Hiện thực hàm lấy danh sách danh mục làm Dropdown
+    public async Task<List<StationeryCategoryViewModel>> GetAllCategoriesAsync()
+    {
+        // Giả sử bạn bổ sung hàm GetAllCategoriesAsync() bên IStationeryRepository
+        // Hoặc bạn có thể dùng DbContext trực tiếp nếu Repository cho phép, nhưng chuẩn nhất là qua Repo:
+        var categories = await _stationeryRepository.GetAllCategoriesAsync();
+        return categories
+            .Select(c => new StationeryCategoryViewModel { Id = c.Id, Name = c.Name })
+            .ToList();
+    }
+
+    // 4. Xử lý nghiệp vụ thêm mới sản phẩm
+    public async Task CreateItemAsync(StationeryCreateViewModel model)
+    {
+        var newItem = new StationeryItem
+        {
+            Sku = model.Sku,
+            Name = model.Name,
+            Price = model.Price,
+            Quantity = model.Quantity,
+            Supplier = model.Supplier,
+            CategoryId = model.CategoryId,
+            LastUpdatedAt = DateTime.UtcNow,
+        };
+
+        await _stationeryRepository.AddAsync(newItem);
+        await _stationeryRepository.SaveChangesAsync();
+    }
+
+    public async Task<List<StationeryListItemViewModel>> SearchItemsAsync(
+        string? keyword,
+        int? categoryId
+    )
+    {
+        var items = await _stationeryRepository.SearchAsync(keyword, categoryId);
+
+        return items
+            .Select(item => new StationeryListItemViewModel
+            {
+                Id = item.Id,
+                Sku = item.Sku,
+                Name = item.Name,
+                Price = item.Price,
+                Quantity = item.Quantity,
+                Supplier = item.Supplier,
+                CategoryName = item.Category?.Name ?? "Chưa phân loại",
+            })
+            .ToList();
     }
 }

@@ -13,8 +13,4 @@ public interface IStationeryRepository
         decimal? maxPrice
     );
     Task UpdateStockAsync(int itemId, int quantity);
-    Task<StationeryOrder> CreateOrderWithTransactionAsync(
-        string customerName,
-        List<(int itemId, int qty)> items
-    );
 }

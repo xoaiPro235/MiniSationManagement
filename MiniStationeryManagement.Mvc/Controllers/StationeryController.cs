@@ -1,43 +1,70 @@
 using Microsoft.AspNetCore.Mvc;
 using MiniStationeryManagement.Mvc.Services;
+using MiniStationeryManagement.Mvc.ViewModels;
 
 namespace MiniStationeryManagement.Mvc.Controllers;
 
 public class StationeryController : Controller
 {
-    private readonly StationeryService _stationeryService;
+    private readonly IStationeryService _stationeryService;
 
-    public StationeryController(StationeryService stationeryService)
+    // Chỉ inject đúng dịch vụ quản lý sản phẩm
+    public StationeryController(IStationeryService stationeryService)
     {
         _stationeryService = stationeryService;
     }
 
+    // GET: /Stationery hoặc /Stationery/Index
     public async Task<IActionResult> Index(int? categoryId, decimal? minPrice, decimal? maxPrice)
     {
-        var viewModel = await _stationeryService.GetFilteredListAsync(
-            categoryId,
-            minPrice,
-            maxPrice
-        );
-        return View(viewModel);
+        var items = await _stationeryService.GetFilteredListAsync(categoryId, minPrice, maxPrice);
+        return View(items);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Checkout(string customerName, int itemId, int quantity)
+    // GET: /Stationery/Detail/{id}
+    public async Task<IActionResult> Detail(int id)
     {
-        try
+        var item = await _stationeryService.GetDetailByIdAsync(id);
+        if (item == null)
         {
-            var orderItems = new List<(int itemId, int qty)> { (itemId, quantity) };
-            await _stationeryService.OrderStationeryAsync(customerName, orderItems);
+            return NotFound();
+        }
+        return View(item);
+    }
 
-            TempData["SuccessMessage"] =
-                "Đặt hàng văn phòng phẩm thành công! Số lượng tồn kho đã được cập nhật tự động.";
-        }
-        catch (Exception ex)
+    // GET: /Stationery/Create
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        ViewBag.Categories = await _stationeryService.GetAllCategoriesAsync();
+        return View(new StationeryCreateViewModel());
+    }
+
+    // POST: /Stationery/Create
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(StationeryCreateViewModel model)
+    {
+        if (ModelState.IsValid)
         {
-            TempData["ErrorMessage"] =
-                $"Giao dịch thất bại! Lỗi: {ex.Message} - Hệ thống đã kích hoạt cơ chế Rollback an toàn dữ liệu.";
+            await _stationeryService.CreateItemAsync(model);
+            return RedirectToAction(nameof(Index));
         }
-        return RedirectToAction(nameof(Index));
+
+        ViewBag.Categories = await _stationeryService.GetAllCategoriesAsync();
+        return View(model);
+    }
+
+    // GET: /Stationery/Search
+    public IActionResult Search()
+    {
+        return View();
+    }
+
+    // GET/POST: /Stationery/PerformSearch (Dùng cho AJAX)
+    public async Task<IActionResult> PerformSearch(string? keyword, int? categoryId)
+    {
+        var results = await _stationeryService.SearchItemsAsync(keyword, categoryId);
+        return PartialView("_StationerySearchResultTable", results);
     }
 }
