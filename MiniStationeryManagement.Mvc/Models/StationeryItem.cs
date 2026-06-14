@@ -3,12 +3,14 @@ namespace MiniStationeryManagement.Mvc.Models;
 public class StationeryItem
 {
     public int Id { get; set; }
-    public string Sku { get; set; } = "";
-    public string Name { get; set; } = "";
-    public string Category { get; set; } = "";
-    public string Supplier { get; set; } = "";
+    public string Sku { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public string Supplier { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public int Quantity { get; set; }
     public int MinStock { get; set; }
     public DateTime LastUpdatedAt { get; set; }
+
+    public int CategoryId { get; set; }
+    public StationeryCategory? Category { get; set; }
 }

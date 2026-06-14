@@ -1,29 +1,35 @@
+using Microsoft.EntityFrameworkCore;
+using MiniStationeryManagement.Mvc.Data;
+using MiniStationeryManagement.Mvc.Options;
+using MiniStationeryManagement.Mvc.Repositories;
 using MiniStationeryManagement.Mvc.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+builder.Services.AddScoped<IStationeryRepository, StationeryRepository>();
+builder.Services.AddScoped<StationeryService>();
+
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<StationeryService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
-
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
-app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+app.MapControllerRoute(name: "default", pattern: "{controller=Stationery}/{action=Index}/{id?}");
 
 app.Run();

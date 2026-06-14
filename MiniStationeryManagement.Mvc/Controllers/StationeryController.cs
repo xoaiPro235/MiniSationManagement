@@ -1,134 +1,43 @@
 using Microsoft.AspNetCore.Mvc;
-using MiniStationeryManagement.Mvc.Models;
 using MiniStationeryManagement.Mvc.Services;
-using MiniStationeryManagement.Mvc.ViewModels;
 
 namespace MiniStationeryManagement.Mvc.Controllers;
 
 public class StationeryController : Controller
 {
-    private readonly StationeryService _service;
+    private readonly StationeryService _stationeryService;
 
-    public StationeryController(StationeryService service)
+    public StationeryController(StationeryService stationeryService)
     {
-        _service = service;
+        _stationeryService = stationeryService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index(int? categoryId, decimal? minPrice, decimal? maxPrice)
     {
-        var items = _service.GetAll().Select(ToListItemViewModel).ToList();
-        return View(items);
-    }
-
-    public IActionResult Detail(int id)
-    {
-        var item = _service.GetById(id);
-        if (item == null)
-        {
-            return NotFound($"Không tìm thấy mặt hàng văn phòng phẩm có ID = {id}");
-        }
-
-        var viewModels = ToDetailViewModel(item);
-        return View(viewModels);
-    }
-
-    [HttpGet]
-    public IActionResult Search(string? keyword, decimal? minPrice, string? supplier)
-    {
-        var items = _service
-            .Search(keyword, minPrice, supplier)
-            .Select(ToListItemViewModel)
-            .ToList();
-
-        var viewModel = new StationerySearchViewModel
-        {
-            Keyword = keyword ?? "",
-            MinPrice = minPrice,
-            Supplier = supplier ?? "",
-            StationeryItems = items,
-        };
-
-        return View(viewModel);
-    }
-
-    [HttpGet]
-    public IActionResult Create()
-    {
-        var viewModel = new StationeryCreateViewModel { Quantity = 1, MinStock = 1 };
-
+        var viewModel = await _stationeryService.GetFilteredListAsync(
+            categoryId,
+            minPrice,
+            maxPrice
+        );
         return View(viewModel);
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Create(StationeryCreateViewModel model)
+    public async Task<IActionResult> Checkout(string customerName, int itemId, int quantity)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return View(model);
+            var orderItems = new List<(int itemId, int qty)> { (itemId, quantity) };
+            await _stationeryService.OrderStationeryAsync(customerName, orderItems);
+
+            TempData["SuccessMessage"] =
+                "Đặt hàng văn phòng phẩm thành công! Số lượng tồn kho đã được cập nhật tự động.";
         }
-
-        _service.Create(model);
-        TempData["SuccessMessage"] = "Đã thêm mới văn phòng phẩm thành công vào hệ thống!";
-
-        return RedirectToAction(nameof(Index));
-    }
-
-    public IActionResult Stats()
-    {
-        var stats = _service.GetStats();
-        return View(stats);
-    }
-
-    public IActionResult Welcome()
-    {
-        return Content("Chào mừng đến với Mini Stationery Management!");
-    }
-
-    public IActionResult StationeryJson()
-    {
-        var rawData = _service.GetAll();
-        return Json(rawData);
-    }
-
-    public IActionResult GoToCatalog()
-    {
-        return RedirectToAction(nameof(Index));
-    }
-
-    public IActionResult Force404()
-    {
-        return NotFound("404 NotFound");
-    }
-
-    private static StationeryListItemViewModel ToListItemViewModel(StationeryItem item)
-    {
-        return new StationeryListItemViewModel
+        catch (Exception ex)
         {
-            Id = item.Id,
-            Sku = item.Sku,
-            Name = item.Name,
-            Category = item.Category,
-            Supplier = item.Supplier,
-            Price = item.Price,
-            Quantity = item.Quantity,
-            MinStock = item.MinStock,
-        };
-    }
-
-    private static StationeryDetailViewModel ToDetailViewModel(StationeryItem item)
-    {
-        return new StationeryDetailViewModel
-        {
-            Id = item.Id,
-            Sku = item.Sku,
-            Name = item.Name,
-            Category = item.Category,
-            Supplier = item.Supplier,
-            Price = item.Price,
-            Quantity = item.Quantity,
-            MinStock = item.MinStock,
-            LastUpdatedAt = item.LastUpdatedAt,
-        };
+            TempData["ErrorMessage"] =
+                $"Giao dịch thất bại! Lỗi: {ex.Message} - Hệ thống đã kích hoạt cơ chế Rollback an toàn dữ liệu.";
+        }
+        return RedirectToAction(nameof(Index));
     }
 }

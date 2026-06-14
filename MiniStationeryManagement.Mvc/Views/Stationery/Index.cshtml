@@ -1,40 +1,90 @@
 @model List<MiniStationeryManagement.Mvc.ViewModels.StationeryListItemViewModel>
+
 @{
-    ViewData["Title"] = "Danh mục Văn phòng phẩm";
+    ViewData["Title"] = "Danh Sách Văn Phòng Phẩm";
 }
 
-<div class="page-header">
-    <div>
-        <h2 class="page-title">Cửa hàng Văn phòng phẩm</h2>
-        <p class="page-description">Quản lý nâng cấp danh sách sản phẩm bằng Layout & Partial View.</p>
-    </div>
-    <div>
-        <a class="btn btn-secondary" asp-controller="Stationery" asp-action="Search">Tra cứu sản phẩm</a>
-        <a class="btn" asp-controller="Stationery" asp-action="Create">+ Thêm sản phẩm</a>
-    </div>
+<div class="container mt-4">
+    <h2>Quản Lý Kho Văn Phòng Phẩm - Lab 04 Upgrade</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Thành công!</strong> @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Lỗi hệ thống:</strong> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <form method="get" action="@Url.Action("Index", "Stationery")" class="row g-3 my-3 p-3 bg-light border rounded shadow-sm">
+        <div class="col-md-4">
+            <label class="form-label fw-bold">Danh mục vật tư</label>
+            <select name="categoryId" class="form-select">
+                <option value="">-- Tất cả danh mục --</option>
+                <option value="1">Bút & Viết</option>
+                <option value="2">Giấy & Sổ viết</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Giá tối thiểu (đ)</label>
+            <input type="number" name="minPrice" class="form-control" placeholder="Ví dụ: 2000" />
+        </div>
+        <div class="col-md-3">
+            <label class="form-label fw-bold">Giá tối đa (đ)</label>
+            <input type="number" name="maxPrice" class="form-control" placeholder="Ví dụ: 100000" />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-funnel"></i> Lọc dữ liệu
+            </button>
+        </div>
+    </form>
+
+    <table class="table table-bordered table-striped table-hover mt-3 shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Mã SKU (Feature 3)</th>
+                <th>Tên văn phòng phẩm</th>
+                <th>Danh mục liên kết</th>
+                <th>Nhà cung cấp</th>
+                <th>Đơn giá</th>
+                <th>Số lượng kho</th>
+                <th>Thao tác nhanh</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><span class="badge bg-secondary p-2">@item.Sku</span></td>
+                    <td class="fw-bold">@item.Name</td>
+                    <td>@item.CategoryName</td>
+                    <td><small class="text-muted">@item.Supplier</small></td>
+                    <td class="text-end text-primary fw-bold">@item.Price.ToString("N0") đ</td>
+                    <td>
+                        <span class="fw-bold">@item.Quantity</span>
+                        
+                        @if (item.IsLowStock)
+                        {
+                            <span class="badge bg-danger ms-2 animate__animated animate__flash">Sắp hết hàng</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="Checkout" method="post" class="d-inline-flex">
+                            <input type="hidden" name="itemId" value="@item.Id" />
+                            <input type="hidden" name="customerName" value="Mai Văn Lực" />
+                            <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm me-2" style="width:75px;" />
+                            <button type="submit" class="btn btn-sm btn-success">
+                                <i class="bi bi-cart-plus"></i> Mua ngay
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="success-box">
-        @TempData["SuccessMessage"]
-    </div>
-}
-
-<div class="info-box">
-    <strong>Tổng quy mô mặt hàng hiện tại:</strong> @Model.Count sản phẩm.
-</div>
-
-@if (Model.Count == 0)
-{
-    <p>Hệ thống trống. Vui lòng bấm nút Thêm để bổ sung sản phẩm.</p>
-}
-else
-{
-    <div class="product-grid">
-        @foreach (var item in Model)
-        {
-            <partial name="_StationeryCard" model="item" />
-        }
-    </div>
-}
