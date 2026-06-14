@@ -32,7 +32,7 @@
     </div>
 
     <div class="stat-card" style="padding: 20px; background: #fff; border: 1px solid #eee; border-radius: 8px; text-align: center;">
-        <div class="stat-number" style="font-size: 2em; font-weight: bold; color: #ffc107;">@Model.LowStockItemsCount</div>
+        <div class="stat-number" style="font-size: 2em; font-weight: bold; color: #ffc107;">@Model.NeedReorderCount</div>
         <div class="stat-label" style="color: #666; font-size: 0.9em; margin-top: 5px;">Sản phẩm chạm mốc tối thiểu</div>
     </div>
 </div>
@@ -42,9 +42,9 @@
         <span style="font-size: 1.5em;">📢</span>
         <div>
             <strong style="display: block; margin-bottom: 2px;">Đánh giá tình hình tồn kho (Feature 1 - Options):</strong>
-            @if (Model.LowStockItemsCount > 0)
+            @if (Model.NeedReorderCount > 0)
             {
-                <span>⏳ Phát hiện thấy có <strong>@Model.LowStockItemsCount</strong> mặt hàng sắp hết kho theo ngưỡng thiết lập. Nên lên kế hoạch nhập hàng gấp.</span>
+                <span>⏳ Phát hiện thấy có <strong>@Model.NeedReorderCount</strong> mặt hàng sắp hết kho theo ngưỡng thiết lập. Nên lên kế hoạch nhập hàng gấp.</span>
             }
             else
             {
@@ -71,7 +71,7 @@
             </tr>
             <tr style="border-bottom: 1px solid #eee;">
                 <th style="padding: 12px; text-align: left; background: #f9f9f9;">Số lượng văn phòng phẩm cần mua thêm</th>
-                <td style="padding: 12px;"><span style="padding: 3px 8px; background: #fff3cd; color: #856404; border-radius: 4px; font-weight: bold;">@Model.LowStockItemsCount sản phẩm</span></td>
+                <td style="padding: 12px;"><span style="padding: 3px 8px; background: #fff3cd; color: #856404; border-radius: 4px; font-weight: bold;">@Model.NeedReorderCount sản phẩm</span></td>
             </tr>
         </tbody>
     </table>

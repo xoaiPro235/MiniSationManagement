@@ -1,75 +1,69 @@
 @model MiniStationeryManagement.Mvc.ViewModels.StationerySearchViewModel
+
 @{
-    ViewData["Title"] = "Tra cứu văn phòng phẩm";
+    ViewData["Title"] = "Tìm kiếm Văn phòng phẩm (AJAX)";
 }
 
-<div class="page-header">
-    <div>
-        <h2 class="page-title">Bộ lọc tìm kiếm văn phòng phẩm</h2>
-        <p class="page-description">Sử dụng công nghệ AJAX để lọc dữ liệu thời gian thực không cần tải lại trang.</p>
-    </div>
-    <a class="btn btn-light" asp-controller="Stationery" asp-action="Index" style="text-decoration: none; padding: 8px 16px; border: 1px solid #ccc; border-radius: 4px; background: #fff; color: #333;">Quay lại trang chủ</a>
-</div>
+<h2>@ViewData["Title"]</h2>
 
-<div class="form-layout" style="margin-top: 20px;">
-    <div class="form-box" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 25px;">
-        
-        <div class="form-group" style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Từ khóa tìm kiếm (Tên / SKU)</label>
-            <input type="text" id="searchKeyword" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" placeholder="Nhập tên sản phẩm hoặc mã SKU..." />
-        </div>
-        
-        <div class="form-group" style="margin-bottom: 15px;">
-            <label style="display: block; font-weight: bold; margin-bottom: 5px;">Nhóm danh mục liên kết</label>
-            <select id="searchCategoryId" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="">-- Tất cả danh mục --</option>
-                <option value="1">Bút & Viết</option>
-                <option value="2">Giấy & Sổ viết</option>
-            </select>
-        </div>
-        
-        <button type="button" id="btnClear" class="btn btn-secondary" style="padding: 8px 16px; background: #6c757d; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Xóa bộ lọc</button>
+<form id="ajaxSearchForm" method="get">
+    <div>
+        <label for="keyword">Từ khóa:</label>
+        <input type="text" id="keyword" name="keyword" placeholder="Nhập tên sản phẩm..." />
     </div>
 
     <div>
-        <h3 style="border-bottom: 2px solid #eee; padding-bottom: 8px; margin-bottom: 15px;">Kết quả tra cứu</h3>
-        
-        <div id="search-results">
-            @await Html.PartialAsync("_StationerySearchResultTable", Model.StationeryItems)
-        </div>
+        <label for="categoryId">Danh mục:</label>
+        <select id="categoryId" name="categoryId">
+            <option value="">-- Tất cả danh mục --</option>
+            @if (ViewBag.Categories != null)
+            {
+                foreach (var cat in ViewBag.Categories)
+                {
+                    <option value="@cat.Value">@cat.Text</option>
+                }
+            }
+        </select>
     </div>
+
+    <button type="submit">Tìm kiếm</button>
+</form>
+
+<hr />
+
+<div id="searchResultArea">
+    <p>Nhập từ khóa và nhấn Tìm kiếm để xem kết quả...</p>
 </div>
 
 @section Scripts {
     <script>
-        // Bắt sự kiện người dùng gõ chữ vào ô tìm kiếm
-        document.getElementById('searchKeyword').addEventListener('keyup', executeSearch);
-        
-        // Bắt sự kiện người dùng thay đổi lựa chọn Danh mục
-        document.getElementById('searchCategoryId').addEventListener('change', executeSearch);
+        $(document).ready(function () {
+            $("#ajaxSearchForm").on("submit", function (e) {
+                e.preventDefault(); // Chặn reload trang
 
-        // Nút xóa sạch bộ lọc
-        document.getElementById('btnClear').addEventListener('click', function () {
-            document.getElementById('searchKeyword').value = '';
-            document.getElementById('searchCategoryId').value = '';
-            executeSearch();
+                $("#searchResultArea").html('<p>Đang tìm kiếm...</p>');
+
+                var keywordVal = $("#keyword").val();
+                var categoryIdVal = $("#categoryId").val();
+
+                $.ajax({
+                    url: '@Url.Action("PerformSearch", "Stationery")',
+                    type: 'GET',
+                    data: { 
+                        keyword: keywordVal, 
+                        categoryId: categoryIdVal 
+                    },
+                    success: function (response) {
+                        $("#searchResultArea").html(response);
+                    },
+                    error: function () {
+                        $("#searchResultArea").html('<p>Đã xảy ra lỗi khi tìm kiếm.</p>');
+                    }
+                });
+            });
         });
-
-        // Hàm gọi AJAX tự động kết nối trực tiếp vào hành động PerformSearch có sẵn của bạn
-        function executeSearch() {
-            var keyword = document.getElementById('searchKeyword').value;
-            var categoryId = document.getElementById('searchCategoryId').value;
-
-            // Kéo dữ liệu ngầm từ URL /Stationery/PerformSearch của bạn
-            var url = '/Stationery/PerformSearch?keyword=' + encodeURIComponent(keyword);
-            if (categoryId) {
-                url += '&categoryId=' + categoryId;
-            }
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+    </script>
+}hr.readyState === 4 && xhr.status === 200) {
                     // Đắp mảnh HTML của bảng kết quả vào vùng hiển thị mà không reload trang
                     document.getElementById('search-results').innerHTML = xhr.responseText;
                 }

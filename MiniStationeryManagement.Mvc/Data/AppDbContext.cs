@@ -84,7 +84,7 @@ public class AppDbContext : DbContext
                     Quantity = 50,
                     MinStock = 10,
                     CategoryId = 1,
-                    LastUpdatedAt = DateTime.UtcNow,
+                    LastUpdatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
                 },
                 new StationeryItem
                 {
@@ -96,7 +96,7 @@ public class AppDbContext : DbContext
                     Quantity = 3,
                     MinStock = 5,
                     CategoryId = 2,
-                    LastUpdatedAt = DateTime.UtcNow,
+                    LastUpdatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
                 },
                 new StationeryItem
                 {
@@ -108,7 +108,7 @@ public class AppDbContext : DbContext
                     Quantity = 15,
                     MinStock = 5,
                     CategoryId = 2,
-                    LastUpdatedAt = DateTime.UtcNow,
+                    LastUpdatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
                 }
             );
     }

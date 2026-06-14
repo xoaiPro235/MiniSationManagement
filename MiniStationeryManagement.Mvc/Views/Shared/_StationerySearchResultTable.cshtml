@@ -1,30 +1,45 @@
-@model List<MiniStationeryManagement.Mvc.ViewModels.StationeryListItemViewModel>
+@model IEnumerable<MiniStationeryManagement.Mvc.ViewModels.StationeryListItemViewModel>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Tên sản phẩm</th>
-            <th>Danh mục</th>
-            <th>Giá bán</th>
-            <th>Tồn kho</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (Model == null || !Model.Any())
+{
+    <p>Không tìm thấy sản phẩm văn phòng phẩm nào phù hợp với bộ lọc.</p>
+}
+else
+{
+    <table border="1">
+        <thead>
             <tr>
-                <td>@item.Name</td>
-                <td>@item.Supplier</td>
-                <td>@item.Category</td>
-                <td>@item.PriceText</td>
-                <td>@item.Quantity</td>
-                <td>@item.StockStatus</td>
-                <td>
-                    <a asp-controller="Stationery" asp-action="Detail" asp-route-id="@item.Id">Xem</a>
-                </td>
+                <th>Tên sản phẩm</th>
+                <th>Danh mục</th>
+                <th>Giá bán</th>
+                <th>Tồn kho</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.Price.ToString("N0") đ</td>
+                    <td>@item.Quantity</td>
+                    <td>
+                        @if (item.Quantity <= 0)
+                        {
+                            <span>Hết hàng</span>
+                        }
+                        else
+                        {
+                            <span>Còn hàng</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Stationery" asp-action="Detail" asp-route-id="@item.Id">Xem chi tiết</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
