@@ -8,7 +8,6 @@ public class StationeryController : Controller
 {
     private readonly IStationeryService _stationeryService;
 
-    // Chỉ inject đúng dịch vụ quản lý sản phẩm
     public StationeryController(IStationeryService stationeryService)
     {
         _stationeryService = stationeryService;

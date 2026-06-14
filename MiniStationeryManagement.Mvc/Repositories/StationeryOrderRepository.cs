@@ -42,7 +42,6 @@ public class StationeryOrderRepository : IStationeryOrderRepository
                         $"Sản phẩm '{item.Name}' không đủ số lượng trong kho (Hiện còn: {item.Quantity})."
                     );
 
-                // Trừ tồn kho sản phẩm (Sử dụng Tracking mặc định của DbContext)
                 item.Quantity -= itemDetail.qty;
 
                 var orderItem = new StationeryOrderItem

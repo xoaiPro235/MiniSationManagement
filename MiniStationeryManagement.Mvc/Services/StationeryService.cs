@@ -20,7 +20,6 @@ public class StationeryService : IStationeryService
         _appSettings = appSettings.Value;
     }
 
-    // 1. Hàm lọc danh sách (Đã có sẵn)
     public async Task<List<StationeryListItemViewModel>> GetFilteredListAsync(
         int? categoryId,
         decimal? minPrice,
@@ -44,7 +43,6 @@ public class StationeryService : IStationeryService
             .ToList();
     }
 
-    // 2. Hiện thực hàm lấy Chi tiết sản phẩm
     public async Task<StationeryDetailViewModel?> GetDetailByIdAsync(int id)
     {
         var item = await _stationeryRepository.GetByIdAsync(id);
@@ -63,7 +61,6 @@ public class StationeryService : IStationeryService
         };
     }
 
-    // 3. Hiện thực hàm lấy danh sách danh mục làm Dropdown
     public async Task<List<StationeryCategoryViewModel>> GetAllCategoriesAsync()
     {
         var categories = await _stationeryRepository.GetAllCategoriesAsync();
@@ -72,7 +69,6 @@ public class StationeryService : IStationeryService
             .ToList();
     }
 
-    // 4. Xử lý nghiệp vụ thêm mới sản phẩm
     public async Task CreateItemAsync(StationeryCreateViewModel model)
     {
         var newItem = new StationeryItem

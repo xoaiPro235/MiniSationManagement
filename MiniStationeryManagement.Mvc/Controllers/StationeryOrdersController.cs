@@ -7,7 +7,6 @@ public class StationeryOrdersController : Controller
 {
     private readonly IStationeryOrderService _orderService;
 
-    // Chỉ inject dịch vụ Order hóa đơn đúng nguyên lý Single Responsibility
     public StationeryOrdersController(IStationeryOrderService orderService)
     {
         _orderService = orderService;
@@ -28,7 +27,6 @@ public class StationeryOrdersController : Controller
         {
             var orderItems = items.Select(i => (i.ItemId, i.Quantity)).ToList();
 
-            // Thực hiện nghiệp vụ lưu hóa đơn và trừ tồn kho trong cùng 1 Transaction cô lập
             await _orderService.OrderStationeryAsync(customerName, orderItems);
 
             TempData["Success"] = "Đặt hàng thành công! Số lượng tồn kho đã được cập nhật tự động.";
