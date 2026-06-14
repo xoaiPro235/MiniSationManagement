@@ -58,14 +58,22 @@ public class StationeryController : Controller
     [HttpGet]
     public async Task<IActionResult> Search()
     {
-        // Đẩy danh sách SelectListItem vào ViewBag để giao diện có dữ liệu vẽ Dropdown
-        ViewBag.Categories = await _stationeryService.GetAllCategoriesAsync();
+        // 1. Lấy danh sách ViewModel từ tầng Service về
+        var categories = await _stationeryService.GetAllCategoriesAsync();
 
-        // Khởi tạo và truyền Model chuẩn của bạn sang View để không bị NullReferenceException
-        var model = new StationerySearchViewModel();
-        return View(model);
-    } // GET/POST: /Stationery/PerformSearch (Dùng cho AJAX)
+        // 2. Map danh sách này thành các SelectListItem để có thuộc tính .Value và .Text
+        ViewBag.Categories = categories
+            .Select(cat => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            {
+                Value = cat.Id.ToString(),
+                Text = cat.Name,
+            })
+            .ToList();
 
+        return View(new StationerySearchViewModel());
+    }
+
+    // GET/POST: /Stationery/PerformSearch (Dùng cho AJAX)
     public async Task<IActionResult> PerformSearch(string? keyword, int? categoryId)
     {
         var results = await _stationeryService.SearchItemsAsync(keyword, categoryId);

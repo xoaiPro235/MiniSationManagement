@@ -20,6 +20,7 @@
             {
                 foreach (var cat in ViewBag.Categories)
                 {
+                    // Sửa từ .Id và .Name sang .Value và .Text của SelectListItem
                     <option value="@cat.Value">@cat.Text</option>
                 }
             }
@@ -39,7 +40,7 @@
     <script>
         $(document).ready(function () {
             $("#ajaxSearchForm").on("submit", function (e) {
-                e.preventDefault(); // Chặn reload trang
+                e.preventDefault(); // Chặn hành vi reload trang mặc định
 
                 $("#searchResultArea").html('<p>Đang tìm kiếm...</p>');
 
@@ -54,6 +55,7 @@
                         categoryId: categoryIdVal 
                     },
                     success: function (response) {
+                        // Trả về Partial View kết quả và đắp thẳng vào div
                         $("#searchResultArea").html(response);
                     },
                     error: function () {
@@ -62,13 +64,5 @@
                 });
             });
         });
-    </script>
-}hr.readyState === 4 && xhr.status === 200) {
-                    // Đắp mảnh HTML của bảng kết quả vào vùng hiển thị mà không reload trang
-                    document.getElementById('search-results').innerHTML = xhr.responseText;
-                }
-            };
-            xhr.send();
-        }
     </script>
 }

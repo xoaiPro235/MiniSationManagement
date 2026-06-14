@@ -78,41 +78,9 @@
                             @Html.AntiForgeryToken()
                             
                             <input type="hidden" name="items[0].ItemId" value="@item.Id" />
-                            
                             <input type="hidden" name="customerName" value="Mai Văn Lực" />
-                            
                             <input type="number" name="items[0].Quantity" value="1" min="1" class="form-control form-control-sm me-2" style="width:75px;" />
                             
-                            <button type="submit" class="btn btn-sm btn-success">
-                                <i class="bi bi-cart-plus"></i> Mua ngay
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>            @foreach (var item in Model)
-            {
-                <tr>
-                    <td><span class="badge bg-secondary p-2">@item.Sku</span></td>
-                    <td class="fw-bold">@item.Name</td>
-                    <td>@item.CategoryName</td>
-                    <td><small class="text-muted">@item.Supplier</small></td>
-                    <td class="text-end text-primary fw-bold">@item.Price.ToString("N0") đ</td>
-                    <td>
-                        <span class="fw-bold">@item.Quantity</span>
-                        
-                        @if (item.IsLowStock)
-                        {
-                            <span class="badge bg-danger ms-2 animate__animated animate__flash">Sắp hết hàng</span>
-                        }
-                    </td>
-                    <td>
-                        <form asp-action="Checkout" method="post" class="d-inline-flex">
-                            <input type="hidden" name="itemId" value="@item.Id" />
-                            <input type="hidden" name="customerName" value="Mai Văn Lực" />
-                            <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm me-2" style="width:75px;" />
                             <button type="submit" class="btn btn-sm btn-success">
                                 <i class="bi bi-cart-plus"></i> Mua ngay
                             </button>
