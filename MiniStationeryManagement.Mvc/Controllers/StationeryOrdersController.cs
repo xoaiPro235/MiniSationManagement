@@ -43,6 +43,14 @@ public class StationeryOrdersController : Controller
 
         return RedirectToAction("Index", "Stationery");
     }
+
+    // GET: /StationeryOrders/History
+    [HttpGet]
+    public async Task<IActionResult> History()
+    {
+        var orders = await _orderService.GetOrderHistoryAsync();
+        return View(orders);
+    }
 }
 
 public class OrderItemInput

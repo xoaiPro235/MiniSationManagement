@@ -8,4 +8,5 @@ public interface IStationeryOrderRepository
         string customerName,
         List<(int itemId, int qty)> items
     );
+    Task<List<StationeryOrder>> GetAllOrdersAsync();
 }

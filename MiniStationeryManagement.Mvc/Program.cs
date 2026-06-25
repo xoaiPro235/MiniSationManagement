@@ -16,6 +16,8 @@ builder.Services.AddScoped<IStationeryRepository, StationeryRepository>();
 builder.Services.AddScoped<IStationeryService, StationeryService>(); // Đăng ký qua Interface
 builder.Services.AddScoped<IStationeryOrderRepository, StationeryOrderRepository>(); // Đừng quên đăng ký Order!
 builder.Services.AddScoped<IStationeryOrderService, StationeryOrderService>();
+builder.Services.AddScoped<IDataHealthRepository, DataHealthRepository>();
+builder.Services.AddScoped<IDataHealthService, DataHealthService>();
 
 builder.Services.AddControllersWithViews();
 

@@ -9,5 +9,6 @@ public class StationeryListItemViewModel
     public int Quantity { get; set; }
     public string CategoryName { get; set; } = string.Empty;
     public string Supplier { get; set; } = string.Empty;
+    public string Barcode { get; set; } = string.Empty;
     public bool IsLowStock { get; set; }
 }

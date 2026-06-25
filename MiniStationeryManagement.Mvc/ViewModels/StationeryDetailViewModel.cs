@@ -8,5 +8,6 @@ public class StationeryDetailViewModel
     public decimal Price { get; set; }
     public int Quantity { get; set; }
     public string Supplier { get; set; } = string.Empty;
+    public string Barcode { get; set; } = string.Empty;
     public string CategoryName { get; set; } = string.Empty;
 }

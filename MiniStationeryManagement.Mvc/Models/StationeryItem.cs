@@ -10,6 +10,7 @@ public class StationeryItem
     public int Quantity { get; set; }
     public int MinStock { get; set; }
     public DateTime LastUpdatedAt { get; set; }
+    public string Barcode { get; set; } = string.Empty;
 
     public int CategoryId { get; set; }
     public StationeryCategory? Category { get; set; }

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using MiniStationeryManagement.Mvc.Data;
 using MiniStationeryManagement.Mvc.Models;
 
@@ -66,5 +67,16 @@ public class StationeryOrderRepository : IStationeryOrderRepository
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    public async Task<List<StationeryOrder>> GetAllOrdersAsync()
+    {
+        return await _context.StationeryOrders
+            .AsNoTracking()
+            .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.StationeryItem)
+                    .ThenInclude(si => si!.Category)
+            .OrderByDescending(o => o.OrderDate)
+            .ToListAsync();
     }
 }

@@ -27,6 +27,7 @@ public class AppDbContext : DbContext
             entity.ToTable("StationeryItem");
             entity.HasKey(s => s.Id);
             entity.Property(s => s.Sku).IsRequired().HasMaxLength(20);
+            entity.Property(s => s.Barcode).IsRequired().HasMaxLength(50);
             entity.Property(s => s.Name).IsRequired().HasMaxLength(150);
             entity.Property(s => s.Price).HasColumnType("numeric(18,2)");
             entity
@@ -78,6 +79,7 @@ public class AppDbContext : DbContext
                 {
                     Id = 1,
                     Sku = "VPP-BUT-01",
+                    Barcode = "8935212312341",
                     Name = "Bút Bi Thiên Long",
                     Supplier = "Tập đoàn Thiên Long",
                     Price = 5000,
@@ -90,6 +92,7 @@ public class AppDbContext : DbContext
                 {
                     Id = 2,
                     Sku = "VPP-SO-02",
+                    Barcode = "8935212312342",
                     Name = "Sổ Lò Xo A5 Hải Tiến",
                     Supplier = "Công ty Giấy Hải Tiến",
                     Price = 25000,
@@ -102,6 +105,7 @@ public class AppDbContext : DbContext
                 {
                     Id = 3,
                     Sku = "VPP-GIAY-03",
+                    Barcode = "8935212312343",
                     Name = "Ram Giấy Double A A4",
                     Supplier = "Double A Quốc Tế",
                     Price = 85000,

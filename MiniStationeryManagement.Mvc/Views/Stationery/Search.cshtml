@@ -4,45 +4,69 @@
     ViewData["Title"] = "Tìm kiếm Văn phòng phẩm (AJAX)";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container mt-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="bi bi-search"></i> @ViewData["Title"]</h4>
+        </div>
+        <div class="card-body">
+            <form id="ajaxSearchForm" method="get" class="row g-3">
+                <div class="col-md-6">
+                    <label for="keyword" class="form-label fw-bold">Từ khóa</label>
+                    <input type="text" id="keyword" name="keyword" class="form-control" placeholder="Nhập tên sản phẩm cần tìm..." />
+                </div>
 
-<form id="ajaxSearchForm" method="get">
-    <div>
-        <label for="keyword">Từ khóa:</label>
-        <input type="text" id="keyword" name="keyword" placeholder="Nhập tên sản phẩm..." />
+                <div class="col-md-4">
+                    <label for="categoryId" class="form-label fw-bold">Danh mục</label>
+                    <select id="categoryId" name="categoryId" class="form-select">
+                        <option value="">-- Tất cả danh mục --</option>
+                        @if (ViewBag.Categories != null)
+                        {
+                            foreach (var cat in ViewBag.Categories)
+                            {
+                                <option value="@cat.Value">@cat.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Tìm kiếm
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div>
-        <label for="categoryId">Danh mục:</label>
-        <select id="categoryId" name="categoryId">
-            <option value="">-- Tất cả danh mục --</option>
-            @if (ViewBag.Categories != null)
-            {
-                foreach (var cat in ViewBag.Categories)
-                {
-                    // Sửa từ .Id và .Name sang .Value và .Text của SelectListItem
-                    <option value="@cat.Value">@cat.Text</option>
-                }
-            }
-        </select>
+    <div class="card shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0 text-secondary"><i class="bi bi-list-stars"></i> Kết quả tìm kiếm</h5>
+        </div>
+        <div class="card-body" id="searchResultArea">
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-info-circle fs-3"></i>
+                <p class="mt-2 mb-0">Nhập từ khóa hoặc chọn danh mục và nhấn Tìm kiếm để xem kết quả...</p>
+            </div>
+        </div>
     </div>
-
-    <button type="submit">Tìm kiếm</button>
-</form>
-
-<hr />
-
-<div id="searchResultArea">
-    <p>Nhập từ khóa và nhấn Tìm kiếm để xem kết quả...</p>
 </div>
 
 @section Scripts {
     <script>
         $(document).ready(function () {
             $("#ajaxSearchForm").on("submit", function (e) {
-                e.preventDefault(); // Chặn hành vi reload trang mặc định
+                e.preventDefault(); // Chặn reload trang
 
-                $("#searchResultArea").html('<p>Đang tìm kiếm...</p>');
+                // Hiển thị trạng thái loading bằng spinner của Bootstrap
+                $("#searchResultArea").html(`
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Đang tìm kiếm...</span>
+                        </div>
+                        <p class="mt-2 text-muted">Hệ thống đang tìm kiếm dữ liệu, vui lòng đợi...</p>
+                    </div>
+                `);
 
                 var keywordVal = $("#keyword").val();
                 var categoryIdVal = $("#categoryId").val();
@@ -55,11 +79,16 @@
                         categoryId: categoryIdVal 
                     },
                     success: function (response) {
-                        // Trả về Partial View kết quả và đắp thẳng vào div
+                        // Chèn Partial View chứa bảng dữ liệu kết quả vào vùng hiển thị
                         $("#searchResultArea").html(response);
                     },
-                    error: function () {
-                        $("#searchResultArea").html('<p>Đã xảy ra lỗi khi tìm kiếm.</p>');
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        $("#searchResultArea").html(`
+                            <div class="alert alert-danger mb-0" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill"></i> Đã xảy ra lỗi trong quá trình xử lý tìm kiếm. Vui lòng thử lại!
+                            </div>
+                        `);
                     }
                 });
             });

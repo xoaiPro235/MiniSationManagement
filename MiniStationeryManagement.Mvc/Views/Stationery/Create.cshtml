@@ -23,6 +23,12 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="Barcode">Mã vạch sản phẩm (Barcode)</label>
+            <input asp-for="Barcode" class="form-control" placeholder="Ví dụ: 8935212312341" />
+            <span asp-validation-for="Barcode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
             <label asp-for="Name">Tên sản phẩm văn phòng phẩm</label>
             <input asp-for="Name" class="form-control" placeholder="Ví dụ: Bút bi Thiên Long" />
             <span asp-validation-for="Name" class="text-danger"></span>

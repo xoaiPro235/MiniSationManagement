@@ -1,45 +1,53 @@
-@model IEnumerable<MiniStationeryManagement.Mvc.ViewModels.StationeryListItemViewModel>
+@model List<MiniStationeryManagement.Mvc.ViewModels.StationeryListItemViewModel>
 
 @if (Model == null || !Model.Any())
 {
-    <p>Không tìm thấy sản phẩm văn phòng phẩm nào phù hợp với bộ lọc.</p>
+    <div class="text-center text-danger py-4">
+        <i class="bi bi-emoji-frown fs-3"></i>
+        <p class="mt-2 mb-0">Không tìm thấy văn phòng phẩm nào phù hợp với tiêu chí tìm kiếm.</p>
+    </div>
 }
 else
 {
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Tên sản phẩm</th>
-                <th>Danh mục</th>
-                <th>Giá bán</th>
-                <th>Tồn kho</th>
-                <th>Trạng thái</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover align-middle mb-0">
+            <thead class="table-dark">
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.CategoryName</td>
-                    <td>@item.Price.ToString("N0") đ</td>
-                    <td>@item.Quantity</td>
-                    <td>
-                        @if (item.Quantity <= 0)
-                        {
-                            <span>Hết hàng</span>
-                        }
-                        else
-                        {
-                            <span>Còn hàng</span>
-                        }
-                    </td>
-                    <td>
-                        <a asp-controller="Stationery" asp-action="Detail" asp-route-id="@item.Id">Xem chi tiết</a>
-                    </td>
+                    <th>Mã SKU</th>
+                    <th>Mã Barcode</th>
+                    <th>Tên văn phòng phẩm</th>
+                    <th>Danh mục</th>
+                    <th>Nhà cung cấp</th>
+                    <th class="text-end">Đơn giá</th>
+                    <th class="text-center">Số lượng kho</th>
+                    <th class="text-center">Thao tác</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><span class="badge bg-secondary p-2">@item.Sku</span></td>
+                        <td><small class="text-muted">@item.Barcode</small></td>
+                        <td class="fw-bold">@item.Name</td>
+                        <td>@item.CategoryName</td>
+                        <td><small class="text-muted">@item.Supplier</small></td>
+                        <td class="text-end text-primary fw-bold">@item.Price.ToString("N0") đ</td>
+                        <td class="text-center">
+                            <span class="fw-bold">@item.Quantity</span>
+                            @if (item.IsLowStock)
+                            {
+                                <span class="badge bg-danger ms-2">Sắp hết</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a asp-controller="Stationery" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary" style="padding: 4px 8px; border-radius: 4px; font-size: 0.85rem;">
+                                <i class="bi bi-eye"></i> Xem
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }

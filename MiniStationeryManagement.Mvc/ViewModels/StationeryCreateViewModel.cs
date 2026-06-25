@@ -8,6 +8,10 @@ public class StationeryCreateViewModel
     public string Sku { get; set; } = string.Empty;
 
     [Required]
+    [MaxLength(50)]
+    public string Barcode { get; set; } = string.Empty;
+
+    [Required]
     public string Name { get; set; } = string.Empty;
 
     [Required]

@@ -38,6 +38,7 @@ public class StationeryService : IStationeryService
                 Quantity = item.Quantity,
                 Supplier = item.Supplier,
                 CategoryName = item.Category?.Name ?? "Chưa phân loại",
+                Barcode = item.Barcode,
                 IsLowStock = item.Quantity <= _appSettings.LowStockThreshold,
             })
             .ToList();
@@ -57,6 +58,7 @@ public class StationeryService : IStationeryService
             Price = item.Price,
             Quantity = item.Quantity,
             Supplier = item.Supplier,
+            Barcode = item.Barcode,
             CategoryName = item.Category?.Name ?? "Chưa phân loại",
         };
     }
@@ -74,6 +76,7 @@ public class StationeryService : IStationeryService
         var newItem = new StationeryItem
         {
             Sku = model.Sku,
+            Barcode = model.Barcode,
             Name = model.Name,
             Price = model.Price,
             Quantity = model.Quantity,
@@ -102,6 +105,7 @@ public class StationeryService : IStationeryService
                 Price = item.Price,
                 Quantity = item.Quantity,
                 Supplier = item.Supplier,
+                Barcode = item.Barcode,
                 CategoryName = item.Category?.Name ?? "Chưa phân loại",
             })
             .ToList();
