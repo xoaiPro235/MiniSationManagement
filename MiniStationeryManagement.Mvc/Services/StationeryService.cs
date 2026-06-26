@@ -71,6 +71,23 @@ public class StationeryService : IStationeryService
             .ToList();
     }
 
+    public async Task<List<CategoryRelationshipViewModel>> GetCategoryRelationshipsAsync()
+    {
+        var categories = await _stationeryRepository.GetCategoriesWithItemsAsync();
+        return categories
+            .Select(c => new CategoryRelationshipViewModel
+            {
+                CategoryId = c.Id,
+                CategoryName = c.Name,
+                ProductsList = c.StationeryItems.Any()
+                    ? string.Join(", ", c.StationeryItems.Select(item => item.Name))
+                    : "Không có sản phẩm",
+                RelationshipType = "1 - Many",
+                DbSetName = "StationeryCategories"
+            })
+            .ToList();
+    }
+
     public async Task CreateItemAsync(StationeryCreateViewModel model)
     {
         var newItem = new StationeryItem

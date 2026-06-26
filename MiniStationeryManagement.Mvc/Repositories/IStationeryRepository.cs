@@ -14,6 +14,7 @@ public interface IStationeryRepository
     );
     Task UpdateStockAsync(int itemId, int quantity);
     Task<List<StationeryCategory>> GetAllCategoriesAsync();
+    Task<List<StationeryCategory>> GetCategoriesWithItemsAsync();
     Task AddAsync(StationeryItem item);
     Task SaveChangesAsync();
     Task<List<StationeryItem>> SearchAsync(string? keyword, int? categoryId);

@@ -60,6 +60,13 @@ public class StationeryRepository : IStationeryRepository
         return await _context.StationeryCategories.ToListAsync();
     }
 
+    public async Task<List<StationeryCategory>> GetCategoriesWithItemsAsync()
+    {
+        return await _context.StationeryCategories
+            .Include(c => c.StationeryItems)
+            .ToListAsync();
+    }
+
     public async Task AddAsync(StationeryItem item)
     {
         await _context.StationeryItems.AddAsync(item);

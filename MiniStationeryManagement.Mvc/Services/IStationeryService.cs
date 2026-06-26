@@ -14,6 +14,8 @@ public interface IStationeryService
 
     Task<List<StationeryCategoryViewModel>> GetAllCategoriesAsync();
 
+    Task<List<CategoryRelationshipViewModel>> GetCategoryRelationshipsAsync();
+
     Task CreateItemAsync(StationeryCreateViewModel model);
 
     Task<List<StationeryListItemViewModel>> SearchItemsAsync(string? keyword, int? categoryId);

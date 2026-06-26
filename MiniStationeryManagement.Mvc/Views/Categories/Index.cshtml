@@ -1,0 +1,48 @@
+@model List<MiniStationeryManagement.Mvc.ViewModels.CategoryRelationshipViewModel>
+
+@{
+    ViewData["Title"] = "Category & Product Relationship";
+}
+
+<div class="page-header" style="margin-bottom: 20px;">
+    <div>
+        <h1 class="page-title" style="font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Category & Product Relationship</h1>
+        <p class="page-description" style="color: #64748b; font-size: 1.05rem;">Trang /Categories cho thấy quan hệ One-to-Many: một Category có nhiều Product. Đây là phần kiểm tra entity mapping và relationship cơ bản.</p>
+    </div>
+</div>
+
+<div class="form-box" style="padding: 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05); border: 1px solid #e2e8f0; background: white; margin-top: 24px;">
+    <table class="table" style="width: 100%; border-collapse: collapse; margin: 0;">
+        <thead>
+            <tr style="background-color: #1e293b; border-bottom: 2px solid #e2e8f0;">
+                <th style="color: white; background-color: #1e293b; font-weight: 600; padding: 14px 16px; border: none; font-size: 0.95rem;">Category</th>
+                <th style="color: white; background-color: #1e293b; font-weight: 600; padding: 14px 16px; border: none; font-size: 0.95rem;">Products</th>
+                <th style="color: white; background-color: #1e293b; font-weight: 600; padding: 14px 16px; border: none; font-size: 0.95rem;">Relationship</th>
+                <th style="color: white; background-color: #1e293b; font-weight: 600; padding: 14px 16px; border: none; font-size: 0.95rem;">DbSet</th>
+                <th style="color: white; background-color: #1e293b; font-weight: 600; padding: 14px 16px; border: none; font-size: 0.95rem; width: 120px; text-align: left;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="border-bottom: 1px solid #f1f5f9; transition: background-color 0.15s ease;">
+                    <td style="font-weight: 500; color: #1e293b; padding: 16px; border: none; font-size: 0.95rem;">@item.CategoryName</td>
+                    <td style="color: #475569; padding: 16px; border: none; font-size: 0.95rem; line-height: 1.5;">@item.ProductsList</td>
+                    <td style="color: #475569; padding: 16px; border: none; font-size: 0.95rem;">@item.RelationshipType</td>
+                    <td style="color: #475569; padding: 16px; border: none; font-size: 0.95rem; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;">@item.DbSetName</td>
+                    <td style="padding: 16px; border: none; font-size: 0.95rem;">
+                        <a asp-controller="Stationery" asp-action="Index" asp-route-categoryId="@item.CategoryId" style="color: #2563eb; text-decoration: none; font-weight: 500; transition: color 0.15s ease;" onmouseover="this.style.color='#1d4ed8'; this.style.textDecoration='underline'" onmouseout="this.style.color='#2563eb'; this.style.textDecoration='none'">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    tbody tr:hover {
+        background-color: #f8fafc;
+    }
+</style>
