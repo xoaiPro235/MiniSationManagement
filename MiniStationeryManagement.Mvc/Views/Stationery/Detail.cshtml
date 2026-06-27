@@ -65,5 +65,27 @@
             <h3 style="margin: 0; color: #222;">💰 @((Model.Price * Model.Quantity).ToString("N0")) đ</h3>
             <p style="margin: 5px 0 0 0; font-size: 0.85em; color: #888;">Được nhân tích lũy tự động từ giá bán thực tế và lượng tồn khả dụng trong bộ nhớ.</p>
         </div>
+
+        <div class="side-card" style="padding: 15px; border-radius: 8px; background-color: #fff; border: 1px solid #ddd; margin-top: 15px;">
+            <h4 style="margin: 0 0 10px 0; color: #333; font-size: 1em; font-weight: bold;"><i class="bi bi-cart-plus"></i> Đặt mua sản phẩm</h4>
+            <form asp-controller="StationeryOrders" asp-action="PlaceOrder" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="items[0].ItemId" value="@Model.Id" />
+                
+                <div style="margin-bottom: 10px;">
+                    <label style="font-size: 0.85em; color: #666; display: block; margin-bottom: 5px;">Tên khách hàng</label>
+                    <input type="text" name="customerName" value="Mai Văn Lực" class="form-control" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required />
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="font-size: 0.85em; color: #666; display: block; margin-bottom: 5px;">Số lượng đặt</label>
+                    <input type="number" name="items[0].Quantity" value="1" min="1" class="form-control" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" required />
+                </div>
+                
+                <button type="submit" class="btn" style="width: 100%; background-color: #198754; color: white; border: none; padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                    Xác nhận đặt hàng
+                </button>
+            </form>
+        </div>
     </div>
 </div>
