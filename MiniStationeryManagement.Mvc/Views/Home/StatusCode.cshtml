@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = $"Lỗi {ViewBag.StatusCode}";
+    int code = ViewBag.StatusCode ?? 404;
+    string title = code switch
+    {
+        404 => "Không Tìm Thấy Trang",
+        403 => "Không Có Quyền Truy Cập",
+        500 => "Lỗi Máy Chủ Nội Bộ",
+        _ => "Lỗi Hệ Thống"
+    };
+    string desc = code switch
+    {
+        404 => "Đường dẫn bạn yêu cầu không tồn tại hoặc đã bị gỡ bỏ khỏi hệ thống.",
+        403 => "Bạn không có đủ đặc quyền để xem tài nguyên này.",
+        500 => "Đã xảy ra sự cố nghiêm trọng trên máy chủ. Chúng tôi đang khắc phục.",
+        _ => "Đã xảy ra lỗi không xác định."
+    };
+}
+
+<div class="text-center py-5 my-5">
+    <h1 class="display-1 fw-bold text-danger">@code</h1>
+    <h2 class="fw-bold text-dark mt-2 mb-3">@title</h2>
+    <p class="text-muted fs-5 col-md-8 mx-auto">@desc</p>
+    <div class="mt-4">
+        <a class="btn btn-primary btn-lg px-4" href="/">
+            <i class="bi bi-house"></i> Quay lại trang chủ
+        </a>
+        <a class="btn btn-outline-secondary btn-lg px-4 ms-2" href="/Stationery">
+            📦 Vào kho hàng
+        </a>
+    </div>
+</div>

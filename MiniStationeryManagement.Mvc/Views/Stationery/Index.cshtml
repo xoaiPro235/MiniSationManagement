@@ -2,43 +2,62 @@
 
 @{
     ViewData["Title"] = "Danh Sách Văn Phòng Phẩm";
+    var selectedCategoryId = ViewBag.SelectedCategoryId as int?;
 }
 
 <div class="container mt-4">
-    <h2>Quản Lý Kho Văn Phòng Phẩm - Lab 04 Upgrade</h2>
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="page-title mb-1">Quản Lý Kho Văn Phòng Phẩm</h2>
+            <p class="page-description text-muted">Xem, tìm kiếm, điều chỉnh tồn kho và cập nhật thông tin văn phòng phẩm.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-controller="Stationery" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Thêm mới sản phẩm
+            </a>
+            <a asp-controller="Stationery" asp-action="Trash" class="btn btn-warning text-dark">
+                <i class="bi bi-trash3"></i> Thùng rác
+            </a>
+        </div>
+    </div>
 
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="background-color: #d4edda; color: #155724; border-color: #c3e6cb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
             <strong>Thành công!</strong> @TempData["Success"]
         </div>
     }
     @if (TempData["Error"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
             <strong>Lỗi hệ thống:</strong> @TempData["Error"]
         </div>
     }
 
-    <form method="get" action="@Url.Action("Index", "Stationery")" class="row g-3 my-3 p-3 bg-light border rounded shadow-sm">
+    <form method="get" action="@Url.Action("Index", "Stationery")" class="row g-3 my-3 p-3 bg-white border rounded-4 shadow-sm">
         <div class="col-md-4">
             <label class="form-label fw-bold">Danh mục vật tư</label>
-            <select name="categoryId" class="form-select">
+            <select name="categoryId" class="form-select form-control">
                 <option value="">-- Tất cả danh mục --</option>
-                <option value="1">Bút & Viết</option>
-                <option value="2">Giấy & Sổ viết</option>
+                @if (ViewBag.Categories != null)
+                {
+                    foreach (var cat in ViewBag.Categories)
+                    {
+                        <!option value="@cat.Id" @(selectedCategoryId == cat.Id ? "selected" : "")>@cat.Name</!option>
+                    }
+                }
             </select>
         </div>
         <div class="col-md-3">
             <label class="form-label fw-bold">Giá tối thiểu (đ)</label>
-            <input type="number" name="minPrice" class="form-control" placeholder="Ví dụ: 2000" />
+            <input type="number" name="minPrice" class="form-control" placeholder="Ví dụ: 2000" value="@Context.Request.Query["minPrice"]" />
         </div>
         <div class="col-md-3">
             <label class="form-label fw-bold">Giá tối đa (đ)</label>
-            <input type="number" name="maxPrice" class="form-control" placeholder="Ví dụ: 100000" />
+            <input type="number" name="maxPrice" class="form-control" placeholder="Ví dụ: 100000" value="@Context.Request.Query["maxPrice"]" />
         </div>
         <div class="col-md-2 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">
+            <button type="submit" class="btn btn-primary w-100 py-2">
                 <i class="bi bi-funnel"></i> Lọc dữ liệu
             </button>
         </div>
@@ -47,18 +66,21 @@
     <style>
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
         }
         .product-card {
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 16px;
             background-color: #ffffff;
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
         }
         @@keyframes pulse {
             0% { transform: scale(1); }
@@ -68,51 +90,74 @@
     </style>
 
     <div class="product-grid mt-4">
-        @foreach (var item in Model)
+        @if (Model == null || !Model.Any())
         {
-            <div class="product-card shadow-sm p-3 position-relative">
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <span class="badge bg-primary text-white" style="font-size: 0.75rem; padding: 5px 10px; border-radius: 6px;">@item.CategoryName</span>
-                    <span class="badge bg-light text-dark border" style="font-size: 0.75rem; padding: 4px 8px;">SKU: @item.Sku</span>
-                </div>
-                
-                <h4 class="fw-bold text-dark mt-2 mb-1" style="font-size: 1.15rem; min-height: 2.8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;">@item.Name</h4>
-                
-                <div class="text-muted small mb-2">
-                    <div class="mb-1"><i class="bi bi-building"></i> NCC: <strong class="text-secondary">@item.Supplier</strong></div>
-                    <div><i class="bi bi-upc-scan"></i> Barcode: <strong class="text-secondary">@item.Barcode</strong></div>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center my-3">
-                    <div class="product-price text-danger fw-bold m-0" style="font-size: 1.25rem;">
-                        @item.Price.ToString("N0") đ
-                    </div>
-                    <div class="text-end">
-                        <span class="small text-muted">Kho: </span>
-                        <span class="fw-bold text-dark" style="font-size: 1.05rem;">@item.Quantity</span>
-                        @if (item.IsLowStock)
-                        {
-                            <div class="badge bg-danger text-white mt-1 d-block" style="font-size: 0.7rem; padding: 3px 6px; animation: pulse 1.5s infinite;">Sắp hết hàng</div>
-                        }
-                    </div>
-                </div>
-
-                <div class="d-flex gap-2 mt-2 pt-2 border-top">
-                    <a asp-controller="Stationery" asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm flex-grow-1 text-center d-flex align-items-center justify-content-center" style="border: 1px solid #0d6efd; background-color: transparent; color: #0d6efd; border-radius: 6px; font-weight: 500;">
-                        <i class="bi bi-eye me-1"></i> Chi tiết
-                    </a>
-                    
-                    <form asp-controller="StationeryOrders" asp-action="PlaceOrder" method="post" class="flex-grow-1 m-0">
-                        @Html.AntiForgeryToken()
-                        <input type="hidden" name="items[0].ItemId" value="@item.Id" />
-                        <input type="hidden" name="customerName" value="Mai Văn Lực" />
-                        <input type="hidden" name="items[0].Quantity" value="1" />
-                        <button type="submit" class="btn btn-sm w-100 text-center d-flex align-items-center justify-content-center" style="background-color: #198754; border: none; border-radius: 6px; color: white; font-weight: 500; padding: 8px 12px;">
-                            <i class="bi bi-cart-plus me-1"></i> Mua nhanh
-                        </button>
-                    </form>
-                </div>
+            <div class="w-100 text-center py-5" style="grid-column: 1 / -1;">
+                <h4 class="text-muted"><i class="bi bi-info-circle" style="font-size: 3rem;"></i> Không tìm thấy sản phẩm nào</h4>
+                <p class="text-muted">Vui lòng thử lại với tiêu chí lọc khác.</p>
             </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="product-card shadow-sm p-4 position-relative">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-primary text-white" style="font-size: 0.75rem; padding: 5px 10px; border-radius: 6px;">@item.CategoryName</span>
+                            <span class="badge bg-light text-dark border" style="font-size: 0.75rem; padding: 4px 8px;">SKU: @item.Sku</span>
+                        </div>
+                        
+                        <h4 class="fw-bold text-dark mt-2 mb-1" style="font-size: 1.15rem; min-height: 2.8rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4;">@item.Name</h4>
+                        
+                        <div class="text-muted small mb-2">
+                            <div class="mb-1"><i class="bi bi-building"></i> NCC: <strong class="text-secondary">@item.Supplier</strong></div>
+                            <div><i class="bi bi-upc-scan"></i> Barcode: <strong class="text-secondary">@item.Barcode</strong></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center my-3">
+                            <div class="product-price text-danger fw-bold m-0" style="font-size: 1.25rem;">
+                                @item.Price.ToString("N0") đ
+                            </div>
+                            <div class="text-end">
+                                <span class="small text-muted">Tồn kho: </span>
+                                <span class="fw-bold text-dark" style="font-size: 1.05rem;">@item.Quantity</span>
+                                @if (item.IsLowStock)
+                                {
+                                    <div class="badge bg-danger text-white mt-1 d-block" style="font-size: 0.7rem; padding: 3px 6px; animation: pulse 1.5s infinite;">Tồn kho thấp</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="d-flex gap-1 mb-2 pt-2 border-top">
+                            <a asp-action="Detail" asp-route-id="@item.Id" class="btn btn-sm btn-light border flex-grow-1" style="font-size: 0.8rem; padding: 6px;">
+                                <i class="bi bi-eye"></i> Xem
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light border flex-grow-1" style="font-size: 0.8rem; padding: 6px;">
+                                <i class="bi bi-pencil"></i> Sửa
+                            </a>
+                            <a asp-action="AdjustStock" asp-route-id="@item.Id" class="btn btn-sm btn-light border flex-grow-1 text-success" style="font-size: 0.8rem; padding: 6px;">
+                                <i class="bi bi-plus-slash-minus"></i> Kho
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light border flex-grow-1 text-danger" style="font-size: 0.8rem; padding: 6px;">
+                                <i class="bi bi-trash"></i> Xóa
+                            </a>
+                        </div>
+                        
+                        <form asp-controller="StationeryOrders" asp-action="PlaceOrder" method="post" class="m-0">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="items[0].ItemId" value="@item.Id" />
+                            <input type="hidden" name="customerName" value="Mai Văn Lực" />
+                            <input type="hidden" name="items[0].Quantity" value="1" />
+                            <button type="submit" class="btn btn-sm w-100 text-center d-flex align-items-center justify-content-center" style="background-color: #198754; border: none; border-radius: 6px; color: white; font-weight: 500; padding: 8px 12px;">
+                                <i class="bi bi-cart-plus me-1"></i> Mua nhanh (1 SP)
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
         }
     </div>
 </div>

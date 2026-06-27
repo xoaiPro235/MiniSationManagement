@@ -33,7 +33,7 @@ public class DataHealthRepository : IDataHealthRepository
 
     public async Task<bool> TestNoTrackingAsync()
     {
-        var item = await _context.StationeryItems.AsNoTracking().Take(1).ToListAsync();
+        var item = await _context.StationeryItems.AsNoTracking().FirstOrDefaultAsync();
         return true;
     }
 

@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace MiniStationeryManagement.Mvc.Models;
 
 public class StationeryItem
@@ -14,4 +16,12 @@ public class StationeryItem
 
     public int CategoryId { get; set; }
     public StationeryCategory? Category { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTime? DeletedAt { get; set; }
+
+    [Timestamp]
+    public uint RowVersion { get; set; }
 }

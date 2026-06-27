@@ -1,0 +1,13 @@
+2026-06-27 21:00:02.517 +07:00 [WRN] Failed to determine the https port for redirect.
+2026-06-27 21:00:03.257 +07:00 [WRN] Entity 'StationeryItem' has a global query filter defined and is the required end of a relationship with the entity 'StationeryOrderItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-06-27 21:01:11.793 +07:00 [INF] Stationery item updated. ItemId=1, Sku=VPP-BUT-01
+2026-06-27 21:01:45.293 +07:00 [INF] Stationery stock adjusted. ItemId=1, Sku=VPP-BUT-01, Adjustment=10, NewQuantity=60
+2026-06-27 21:02:03.474 +07:00 [WRN] Stationery item soft deleted. ItemId=1, Sku=VPP-BUT-01
+2026-06-27 21:02:18.638 +07:00 [INF] Stationery item restored. ItemId=1, Sku=VPP-BUT-01
+2026-06-27 21:06:58.865 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-06-27 21:14:09.281 +07:00 [WRN] Failed to determine the https port for redirect.
+2026-06-27 21:14:09.864 +07:00 [WRN] Entity 'StationeryItem' has a global query filter defined and is the required end of a relationship with the entity 'StationeryOrderItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-06-27 21:49:19.623 +07:00 [WRN] Failed to determine the https port for redirect.
+2026-06-27 21:49:21.048 +07:00 [WRN] Entity 'StationeryItem' has a global query filter defined and is the required end of a relationship with the entity 'StationeryOrderItem'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2026-06-27 21:55:22.009 +07:00 [WRN] Failed to determine the https port for redirect.
+2026-06-27 22:00:22.443 +07:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.

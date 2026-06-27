@@ -1,11 +1,11 @@
-﻿@{
-    ViewData["Title"] = "Trang Chủ - Mini Stationery Management";
+@{
+    ViewData["Title"] = "Trang Chủ - Mini Stationery Management Dashboard";
 }
 
 <div class="p-5 mb-4 bg-white rounded-4 shadow-sm border position-relative overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
     <div class="container-fluid py-3">
         <span class="badge bg-primary text-white px-3 py-2 mb-3 text-uppercase tracking-wider">Hệ Thống Quản Trị</span>
-        <h1 class="display-5 fw-bold text-dark mb-3" style="letter-spacing: -0.03em;">Mini Stationery Management</h1>
+        <h1 class="display-5 fw-bold text-dark mb-3" style="letter-spacing: -0.03em;">Dashboard Mini Stationery</h1>
         <p class="col-md-9 fs-5 text-muted lh-base">
             Giải pháp toàn diện tối ưu hóa quy trình kiểm kê, điều phối vật tư và giám sát ngưỡng an toàn tồn kho văn phòng phẩm doanh nghiệp theo mô hình chuẩn <strong>ASP.NET Core MVC</strong>.
         </p>
@@ -16,7 +16,34 @@
             <a class="btn btn-outline-secondary btn-lg px-4 py-2-5 fw-semibold" href="/Stationery/Stats">
                 📊 Xem Báo Cáo
             </a>
+            <a class="btn btn-warning btn-lg px-4 py-2-5 fw-semibold text-dark" href="/Stationery/Trash">
+                🗑️ Xem Thùng Rác (@ViewBag.DeletedCount)
+            </a>
         </div>
+    </div>
+</div>
+
+<h3 class="fw-bold mb-3">Chỉ số vận hành hệ thống</h3>
+<div class="stats-grid">
+    <div class="stat-card shadow-sm border-start border-primary border-4">
+        <div class="stat-number">@ViewBag.TotalCount</div>
+        <div class="stat-label">Tổng số sản phẩm</div>
+    </div>
+    <div class="stat-card shadow-sm border-start border-success border-4">
+        <div class="stat-number">@ViewBag.ActiveCount</div>
+        <div class="stat-label">Đang hoạt động</div>
+    </div>
+    <div class="stat-card shadow-sm border-start border-warning border-4">
+        <div class="stat-number">@ViewBag.DeletedCount</div>
+        <div class="stat-label">Đã xóa mềm (Trash)</div>
+    </div>
+    <div class="stat-card shadow-sm border-start border-danger border-4">
+        <div class="stat-number">@ViewBag.LowStockCount</div>
+        <div class="stat-label">Tồn kho thấp (Cảnh báo)</div>
+    </div>
+    <div class="stat-card shadow-sm border-start border-info border-4">
+        <div class="stat-number">@ViewBag.LogsCount</div>
+        <div class="stat-label">Logs phát sinh hôm nay</div>
     </div>
 </div>
 
@@ -24,15 +51,15 @@
     <div class="card-body p-4">
         <div class="d-flex align-items-center gap-2 mb-3">
             <span class="fs-5">🔧</span>
-            <h5 class="fw-bold text-dark m-0">Endpoint Kiểm Thử Hệ Thống (Lab02 Requirements)</h5>
+            <h5 class="fw-bold text-dark m-0">Endpoint Kiểm Thử Hệ Thống (Lab05 Requirements)</h5>
         </div>
         <p class="text-muted small mb-3">Các kích hoạt nhanh và kiểm tra định dạng phản hồi dữ liệu từ các Controller Action:</p>
         
         <div class="d-flex flex-wrap gap-2">
-            <a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-dark" href="/Stationery/Welcome" target="_blank">🌐 Trả về Content()</a>
-            <a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-dark" href="/Stationery/StationeryJson" target="_blank">⚙️ Trả về Json()</a>
-            <a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-dark" href="/Stationery/GoToCatalog">🔀 Điều hướng Redirect()</a>
-<a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-danger" href="/Stationery/Force404" target="_blank">❌ 404 NotFound()</a>
+            <a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-dark" href="/health/live" target="_blank">🟢 Health Live</a>
+            <a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-dark" href="/health/ready" target="_blank">Ready Check (Ready)</a>
+            <a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-dark" href="/AuditLogs" target="_blank">📋 Xem Audit Logs</a>
+            <a class="btn btn-sm btn-light border px-3 py-2 fw-medium text-danger" href="/api/stationery/9999" target="_blank">❌ ProblemDetails (404 API Error)</a>
         </div>
     </div>
 </div>

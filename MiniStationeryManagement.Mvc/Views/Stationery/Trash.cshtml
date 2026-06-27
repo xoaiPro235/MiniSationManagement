@@ -1,0 +1,53 @@
+@model List<MiniStationeryManagement.Mvc.ViewModels.StationeryTrashItemViewModel>
+@{
+    ViewData["Title"] = "Thùng Rác Văn Phòng Phẩm";
+}
+
+<div class="page-header">
+    <div>
+        <h2 class="page-title text-warning"><i class="bi bi-trash3-fill"></i> Thùng Rác Văn Phòng Phẩm</h2>
+        <p class="page-description">Danh sách các sản phẩm đã được xóa mềm (IsDeleted = true). Bạn có thể khôi phục lại chúng.</p>
+    </div>
+    <a class="btn btn-primary" asp-action="Index">Quay lại Kho hàng</a>
+</div>
+
+<div class="card shadow-sm border rounded-4 bg-white p-4">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center py-5">
+            <h4 class="text-muted"><i class="bi bi-folder-x" style="font-size: 3rem;"></i> Thùng rác trống</h4>
+            <p class="text-muted">Không có sản phẩm nào đã xóa trong hệ thống.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 150px;">SKU</th>
+                    <th>Tên sản phẩm</th>
+                    <th style="width: 250px;">Thời gian xóa</th>
+                    <th style="width: 150px;" class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold">@item.Sku</td>
+                        <td>@item.Name</td>
+                        <td>@(item.DeletedAt?.ToString("dd/MM/yyyy HH:mm:ss") ?? "Không rõ")</td>
+                        <td class="text-center">
+                            <form asp-action="Restore" asp-route-id="@item.Id" method="post" class="d-inline m-0">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-success" style="background-color: #198754; font-size: 0.85rem; padding: 6px 12px; border-radius: 6px;">
+                                    <i class="bi bi-arrow-counterclockwise"></i> Khôi phục
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

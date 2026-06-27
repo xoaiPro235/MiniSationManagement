@@ -1,19 +1,22 @@
-@model MiniStationeryManagement.Mvc.ViewModels.StationeryCreateViewModel
+@model MiniStationeryManagement.Mvc.ViewModels.StationeryEditViewModel
 @{
-    ViewData["Title"] = "Thêm mới văn phòng phẩm";
+    ViewData["Title"] = "Cập nhật văn phòng phẩm";
 }
 
 <div class="page-header">
     <div>
-        <h2 class="page-title">Thêm mới Văn phòng phẩm</h2>
-        <p class="page-description">Form POST thực hiện Model Binding đồng bộ dữ liệu an toàn vào hệ thống.</p>
+        <h2 class="page-title">Cập nhật Văn phòng phẩm</h2>
+        <p class="page-description">Chỉnh sửa thông tin sản phẩm và kiểm soát xung đột đồng thời (Concurrency Control) qua RowVersion.</p>
     </div>
     <a class="btn btn-light" asp-controller="Stationery" asp-action="Index">Hủy bỏ</a>
 </div>
 
 <div class="form-layout">
-    <form class="form-box" asp-controller="Stationery" asp-action="Create" method="post">
+    <form class="form-box" asp-controller="Stationery" asp-action="Edit" method="post">
         @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="RowVersion" />
+
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
         <div class="form-group">
@@ -49,29 +52,30 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="Price">Đơn giá bán nhập xưởng (VND)</label>
-            <input asp-for="Price" class="form-control" type="number" placeholder="Ví dụ: 5000" />
+            <label asp-for="Price">Đơn giá bán (VND)</label>
+            <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="Ví dụ: 5000" />
             <span asp-validation-for="Price" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Quantity">Số lượng nhập kho ban đầu</label>
+            <label asp-for="Quantity">Số lượng tồn kho</label>
             <input asp-for="Quantity" class="form-control" type="number" placeholder="Ví dụ: 100" />
             <span asp-validation-for="Quantity" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="MinStock">Mức tồn kho tối thiểu</label>
-            <input asp-for="MinStock" class="form-control" type="number" placeholder="Ví dụ: 10" />
+            <input asp-for="MinStock" class="form-control" type="number" placeholder="Ví dụ: 5" />
             <span asp-validation-for="MinStock" class="text-danger"></span>
         </div>
 
-        <button class="btn btn-primary" type="submit">Lưu lại hệ thống</button>
+        <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
     </form>
 
     <div class="info-box">
-        <h3>Kiến thức cơ bản về Form POST</h3>
-        <p>Khi bạn thực hiện gửi form, ASP.NET Core sẽ tự động phân tách cấu trúc phần thân (HTTP Body) của gói tin POST để khớp giá trị thuộc tính <code>asp-for</code> với Property của ViewModel tương ứng.</p>
+        <h3>Kiểm soát xung đột đồng thời</h3>
+        <p>Hệ thống sử dụng kỹ thuật <strong>Optimistic Concurrency Control</strong> dựa trên <code>RowVersion</code>. Khi dữ liệu được lưu, SQL Server / PostgreSQL sẽ kiểm tra xem phiên bản bản ghi trong DB có khớp với token đính kèm trong form hay không.</p>
+        <p>Nếu người dùng khác đã sửa đổi sản phẩm trước khi bạn nhấn lưu, hệ thống sẽ phát hiện xung đột và hiển thị thông báo lỗi thay vì ghi đè dữ liệu cũ.</p>
     </div>
 </div>
 

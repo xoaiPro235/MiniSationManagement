@@ -1,0 +1,82 @@
+@model List<MiniStationeryManagement.Mvc.ViewModels.AuditLogViewModel>
+@{
+    ViewData["Title"] = "Nhật Ký Hoạt Động Hệ Thống (Audit Logs)";
+}
+
+<div class="page-header">
+    <div>
+        <h2 class="page-title"><i class="bi bi-clock-history"></i> Nhật Ký Vận Hành (Audit Logs)</h2>
+        <p class="page-description">Lọc và phân tích logs ghi nhận từ cấu trúc Serilog với thông tin thời gian, cấp độ và TraceId.</p>
+    </div>
+</div>
+
+<form method="get" action="@Url.Action("Index", "AuditLogs")" class="row g-3 my-3 p-3 bg-white border rounded-4 shadow-sm align-items-end">
+    <div class="col-md-4">
+        <label class="form-label fw-bold">Chọn ngày ghi log</label>
+        <select name="date" class="form-select form-control" asp-items="ViewBag.AvailableDates">
+            <option value="">-- Chọn ngày hoạt động --</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label fw-bold">Cấp độ log (LogLevel)</label>
+        <select name="level" class="form-select form-control">
+            <option value="ALL" selected="@(ViewBag.SelectedLevel == "ALL")">Tất cả cấp độ</option>
+            <option value="INF" selected="@(ViewBag.SelectedLevel == "INF")">Information (INF)</option>
+            <option value="WRN" selected="@(ViewBag.SelectedLevel == "WRN")">Warning (WRN)</option>
+            <option value="ERR" selected="@(ViewBag.SelectedLevel == "ERR")">Error (ERR)</option>
+            <option value="RAW" selected="@(ViewBag.SelectedLevel == "RAW")">Raw / Other</option>
+        </select>
+    </div>
+    <div class="col-md-4 d-flex">
+        <button type="submit" class="btn btn-primary w-100 py-2">
+            <i class="bi bi-funnel"></i> Lọc dữ liệu log
+        </button>
+    </div>
+</form>
+
+<div class="card shadow-sm border rounded-4 bg-white p-4">
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center py-5">
+            <h4 class="text-muted"><i class="bi bi-info-circle" style="font-size: 3rem;"></i> Không tìm thấy log</h4>
+            <p class="text-muted">Không tìm thấy bản ghi log nào khớp với điều kiện lọc tại ngày @ViewBag.SelectedDate.</p>
+        </div>
+    }
+    else
+    {
+        <table class="table" style="font-size: 0.9rem;">
+            <thead>
+                <tr>
+                    <th style="width: 200px;">Thời gian (UTC)</th>
+                    <th style="width: 100px;">Cấp độ</th>
+                    <th>Nội dung thông điệp ghi log</th>
+                    <th style="width: 120px;">Mã SP (SKU)</th>
+                    <th style="width: 100px;">ID SP</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    string badgeClass = log.Level switch
+                    {
+                        "INF" => "badge-success",
+                        "WRN" => "badge-warning",
+                        "ERR" => "badge-danger",
+                        "RAW" => "badge-secondary",
+                        _ => "badge-secondary"
+                    };
+                    
+                    <tr>
+                        <td class="text-muted">@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff")</td>
+                        <td>
+                            <span class="badge @badgeClass" style="border-radius: 6px; padding: 4px 8px; font-size: 0.75rem;">@log.Level</span>
+                        </td>
+                        <td style="word-break: break-all;" class="fw-medium">@log.Message</td>
+                        <td class="fw-bold text-dark">@(string.IsNullOrEmpty(log.SKU) ? "-" : log.SKU)</td>
+                        <td>@(string.IsNullOrEmpty(log.ProductId) ? "-" : log.ProductId)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

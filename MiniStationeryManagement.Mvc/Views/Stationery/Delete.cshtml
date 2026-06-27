@@ -1,0 +1,64 @@
+@model MiniStationeryManagement.Mvc.ViewModels.StationeryDetailViewModel
+@{
+    ViewData["Title"] = "Xác nhận xóa văn phòng phẩm";
+}
+
+<div class="page-header">
+    <div>
+        <h2 class="page-title text-danger">Xác nhận xóa sản phẩm</h2>
+        <p class="page-description">Sản phẩm này sẽ được đưa vào thùng rác (Soft Delete) và có thể được khôi phục sau này.</p>
+    </div>
+    <a class="btn btn-light" asp-action="Index">Hủy bỏ</a>
+</div>
+
+<div class="form-layout" style="grid-template-columns: 1fr 350px;">
+    <div class="form-box border-danger" style="border-width: 2px;">
+        <h3 class="text-danger mb-4"><i class="bi bi-exclamation-triangle-fill"></i> Bạn có chắc chắn muốn xóa sản phẩm này?</h3>
+        
+        <table class="table mb-4">
+            <tr>
+                <th style="width: 200px;">Mã sản phẩm (SKU)</th>
+                <td>@Model.Sku</td>
+            </tr>
+            <tr>
+                <th>Tên sản phẩm</th>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <th>Nhà cung cấp</th>
+                <td>@Model.Supplier</td>
+            </tr>
+            <tr>
+                <th>Mã vạch (Barcode)</th>
+                <td>@Model.Barcode</td>
+            </tr>
+            <tr>
+                <th>Giá bán</th>
+                <td>@Model.Price.ToString("N0") đ</td>
+            </tr>
+            <tr>
+                <th>Số lượng hiện tại</th>
+                <td>@Model.Quantity</td>
+            </tr>
+            <tr>
+                <th>Danh mục vật tư</th>
+                <td>@Model.CategoryName</td>
+            </tr>
+        </table>
+
+        <form asp-action="Delete" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-danger px-4 py-2" style="background-color: #dc3545;">
+                <i class="bi bi-trash"></i> Xác nhận xóa mềm
+            </button>
+            <a class="btn btn-secondary px-4 py-2 ms-2" asp-action="Index">Quay lại danh sách</a>
+        </form>
+    </div>
+
+    <div class="info-box">
+        <h4>Cơ chế Soft Delete</h4>
+        <p>Bằng cách bật cờ <code>IsDeleted = true</code> và ghi lại thời điểm xóa ở trường <code>DeletedAt</code>, sản phẩm sẽ không còn xuất hiện trong các truy vấn sản phẩm đang hoạt động nhờ vào <strong>EF Core Global Query Filters</strong>.</p>
+        <p>Hàng hóa bị xóa sẽ chuyển sang trang <strong>Thùng rác</strong>, nơi bạn có thể khôi phục nó bất kỳ lúc nào.</p>
+    </div>
+</div>

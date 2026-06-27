@@ -27,9 +27,12 @@ public class AppDbContext : DbContext
             entity.ToTable("StationeryItem");
             entity.HasKey(s => s.Id);
             entity.Property(s => s.Sku).IsRequired().HasMaxLength(20);
+            entity.HasIndex(s => s.Sku).IsUnique();
             entity.Property(s => s.Barcode).IsRequired().HasMaxLength(50);
             entity.Property(s => s.Name).IsRequired().HasMaxLength(150);
             entity.Property(s => s.Price).HasColumnType("numeric(18,2)");
+            entity.Property(s => s.RowVersion).IsRowVersion();
+            entity.HasQueryFilter(s => !s.IsDeleted);
             entity
                 .HasOne(s => s.Category)
                 .WithMany(c => c.StationeryItems)
@@ -60,7 +63,7 @@ public class AppDbContext : DbContext
             entity
                 .HasOne(oi => oi.StationeryItem)
                 .WithMany()
-                .HasForeignKey(oi => oi.StationeryItemId)
+                .HasForeignKey(oi => oi.StationeryItemId).IsRequired(false)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
@@ -87,6 +90,8 @@ public class AppDbContext : DbContext
                     MinStock = 10,
                     CategoryId = 1,
                     LastUpdatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+                    CreatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+                    IsDeleted = false
                 },
                 new StationeryItem
                 {
@@ -100,6 +105,8 @@ public class AppDbContext : DbContext
                     MinStock = 5,
                     CategoryId = 2,
                     LastUpdatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+                    CreatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+                    IsDeleted = false
                 },
                 new StationeryItem
                 {
@@ -113,6 +120,8 @@ public class AppDbContext : DbContext
                     MinStock = 5,
                     CategoryId = 2,
                     LastUpdatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+                    CreatedAt = new DateTime(2026, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+                    IsDeleted = false
                 }
             );
     }

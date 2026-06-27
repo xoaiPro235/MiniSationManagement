@@ -18,5 +18,21 @@ public interface IStationeryService
 
     Task CreateItemAsync(StationeryCreateViewModel model);
 
-    Task<List<StationeryListItemViewModel>> SearchItemsAsync(string? keyword, int? categoryId);
+    Task<List<StationeryListItemViewModel>> SearchItemsAsync(string? keyword, int? categoryId, string? stockStatus);
+
+    Task<StationeryEditViewModel?> GetEditDetailAsync(int id);
+
+    Task UpdateItemAsync(StationeryEditViewModel model);
+
+    Task<bool> SoftDeleteAsync(int id);
+
+    Task<List<StationeryTrashItemViewModel>> GetTrashedItemsAsync();
+
+    Task<bool> RestoreAsync(int id);
+
+    Task<bool> SkuExistsAsync(string sku, int? excludeId = null);
+
+    Task<StationeryAdjustStockViewModel?> GetAdjustStockViewModelAsync(int id);
+
+    Task AdjustStockAsync(StationeryAdjustStockViewModel model);
 }

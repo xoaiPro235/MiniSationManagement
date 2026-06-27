@@ -11,14 +11,14 @@
         </div>
         <div class="card-body">
             <form id="ajaxSearchForm" method="get" class="row g-3">
-                <div class="col-md-6">
-                    <label for="keyword" class="form-label fw-bold">Từ khóa</label>
-                    <input type="text" id="keyword" name="keyword" class="form-control" placeholder="Nhập tên sản phẩm cần tìm..." />
+                <div class="col-md-4">
+                    <label for="keyword" class="form-label fw-bold">Từ khóa (Tên / SKU)</label>
+                    <input type="text" id="keyword" name="keyword" class="form-control" placeholder="Nhập tên sản phẩm hoặc SKU..." />
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="categoryId" class="form-label fw-bold">Danh mục</label>
-                    <select id="categoryId" name="categoryId" class="form-select">
+                    <select id="categoryId" name="categoryId" class="form-select form-control">
                         <option value="">-- Tất cả danh mục --</option>
                         @if (ViewBag.Categories != null)
                         {
@@ -30,8 +30,18 @@
                     </select>
                 </div>
 
+                <div class="col-md-3">
+                    <label for="stockStatus" class="form-label fw-bold">Tình trạng tồn kho</label>
+                    <select id="stockStatus" name="stockStatus" class="form-select form-control">
+                        <option value="">-- Tất cả trạng thái --</option>
+                        <option value="normal">Đủ hàng (Bình thường)</option>
+                        <option value="low">Tồn kho thấp (Dưới mức tối thiểu)</option>
+                        <option value="out">Hết hàng (Bằng 0)</option>
+                    </select>
+                </div>
+
                 <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">
+                    <button type="submit" class="btn btn-primary w-100 py-2">
                         <i class="bi bi-search"></i> Tìm kiếm
                     </button>
                 </div>
@@ -46,13 +56,14 @@
         <div class="card-body" id="searchResultArea">
             <div class="text-center text-muted py-4">
                 <i class="bi bi-info-circle fs-3"></i>
-                <p class="mt-2 mb-0">Nhập từ khóa hoặc chọn danh mục và nhấn Tìm kiếm để xem kết quả...</p>
+                <p class="mt-2 mb-0">Nhập từ khóa hoặc chọn bộ lọc và nhấn Tìm kiếm để xem kết quả...</p>
             </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#ajaxSearchForm").on("submit", function (e) {
@@ -70,13 +81,15 @@
 
                 var keywordVal = $("#keyword").val();
                 var categoryIdVal = $("#categoryId").val();
+                var stockStatusVal = $("#stockStatus").val();
 
                 $.ajax({
                     url: '@Url.Action("PerformSearch", "Stationery")',
                     type: 'GET',
                     data: { 
                         keyword: keywordVal, 
-                        categoryId: categoryIdVal 
+                        categoryId: categoryIdVal,
+                        stockStatus: stockStatusVal
                     },
                     success: function (response) {
                         // Chèn Partial View chứa bảng dữ liệu kết quả vào vùng hiển thị

@@ -1,0 +1,56 @@
+@model MiniStationeryManagement.Mvc.ViewModels.StationeryAdjustStockViewModel
+@{
+    ViewData["Title"] = "Điều chỉnh tồn kho";
+}
+
+<div class="page-header">
+    <div>
+        <h2 class="page-title">Điều chỉnh tồn kho</h2>
+        <p class="page-description">Nhập số lượng tăng (+) hoặc giảm (-) để cập nhật trực tiếp lượng hàng tồn kho của sản phẩm.</p>
+    </div>
+    <a class="btn btn-light" asp-action="Index">Hủy bỏ</a>
+</div>
+
+<div class="form-layout">
+    <form class="form-box" asp-controller="Stationery" asp-action="AdjustStock" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="RowVersion" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="form-group mb-3">
+            <label class="form-label fw-bold">Mã sản phẩm (SKU)</label>
+            <input type="text" class="form-control bg-light" value="@Model.Sku" readonly />
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label fw-bold">Tên sản phẩm</label>
+            <input type="text" class="form-control bg-light" value="@Model.Name" readonly />
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label fw-bold">Tồn kho hiện tại</label>
+            <input type="text" class="form-control bg-light fw-bold text-primary" value="@Model.CurrentQuantity" readonly />
+        </div>
+
+        <div class="form-group mb-4">
+            <label asp-for="AdjustmentQuantity">Số lượng điều chỉnh (+/-)</label>
+            <input asp-for="AdjustmentQuantity" class="form-control" type="number" placeholder="Ví dụ: +10 hoặc -5" />
+            <span asp-validation-for="AdjustmentQuantity" class="text-danger"></span>
+            <div class="form-text text-muted small mt-1">Sử dụng dấu cộng (+) để tăng, dấu trừ (-) để giảm tồn kho. Số lượng mới không được nhỏ hơn 0.</div>
+        </div>
+
+        <button class="btn btn-primary w-100" type="submit">Xác nhận điều chỉnh</button>
+    </form>
+
+    <div class="info-box">
+        <h3>Lưu ý về đồng thời trong điều chỉnh</h3>
+        <p>Hành động điều chỉnh tồn kho này sẽ xác thực <code>RowVersion</code> để tránh lỗi ghi đè dữ liệu bán hàng. Nếu lượng tồn kho thực tế đã thay đổi ở máy khách khác trong lúc bạn mở màn hình này, hệ thống sẽ cảnh báo xung đột dữ liệu.</p>
+        <p>Vui lòng kiểm tra kỹ số lượng thực tế trong kho trước khi thực hiện điều chỉnh.</p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
